@@ -1,0 +1,12 @@
+abstract: Merges two users into the same effective user
+author: Alex Vandiver <alexmv@bestpractical.com>
+distribution_type: module
+generated_by: Module::Install version 0.64
+license: GPL version 2
+name: RT-Extension-MergeUsers
+no_index: 
+  directory: 
+    - html
+    - inc
+    - t
+version: 0.02
