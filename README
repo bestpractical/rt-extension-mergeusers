@@ -11,3 +11,8 @@ To install:
 
     perl Makefile.PL
     make install
+
+For 3.8
+
+    Add RT::Extension::MergeUsers to your /opt/rt3/etc/RT_SiteConfig.pm file
+    Set(@Plugins, qw(RT::Extension::MergeUsers));

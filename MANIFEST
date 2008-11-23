@@ -1,4 +1,5 @@
 bin/rt-merge-users
+Changes
 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom
 inc/Module/Install.pm
 inc/Module/Install/Base.pm

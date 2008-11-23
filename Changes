@@ -1,0 +1,9 @@
+0.03_01 2008-11-23 Sun 18:51 -0500 falcone
+
+   remove User_Overlay and Users_Overlay to avoid
+   conflicts with other plugins 
+
+   Use callbacks available in 3.6/3.8 rather than
+   overriding the whole Admin/Users/Modify.html template
+
+   Upgrade Module::Install::RTx to work with 3.8
