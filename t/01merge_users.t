@@ -1,14 +1,10 @@
 #!/sw/bin/perl5.8.6
 
 use strict;
-#use Test::More qw/no_plan/;
 use Test::More tests => 16;
+use RT::Test;
 
-use RT;
-RT::LoadConfig();
-RT::Init;
-
-use RT::Extension::MergeUsers;
+RT->Config->Set('Plugins',qw(RT::Extension::MergeUsers));
 
 my ($id, $message);
 

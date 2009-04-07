@@ -2,19 +2,13 @@
 
 use strict;
 use warnings;
-use lib qw(/opt/rt3/local/lib /opt/rt3/lib);
 use Test::More tests => 8;
+use RT::Test;
 
-use RT;
-RT::LoadConfig();
-RT::Init;
-
-use RT::Extension::MergeUsers;
+RT->Config->Set('Plugins',qw(RT::Extension::MergeUsers));
+use_ok('RT::Extension::MergeUsers');
 
 my ($id, $message);
-
-# make sure the extension is installed
-use_ok('RT::Extension::MergeUsers');
 
 # create N unique users  ($$ == our pid)
 my $primary_user = RT::User->new($RT::SystemUser);
