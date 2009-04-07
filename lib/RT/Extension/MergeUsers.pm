@@ -120,6 +120,20 @@ sub LoadOriginal {
     return $self->SUPER::LoadByCols( @_ );
 }
 
+sub GetMergedUsers {
+    my $self = shift;
+    
+    my $merged_users = $self->FirstAttribute('MergedUsers');
+    unless ($merged_users) {
+        $self->SetAttribute( 
+            Name => 'MergedUsers',
+            Description => 'Users that have been merged into this user',
+            Content => [] );
+        $merged_users = $self->FirstAttribute('MergedUsers');
+    };
+    return $merged_users;
+}
+
 sub MergeInto {
     my $self = shift;
     my $user = shift;
@@ -172,6 +186,9 @@ sub MergeInto {
         Content => $merge->id,
     );
 
+    my $merged_users = $merge->GetMergedUsers;
+    $merged_users->SetContent( [$canonical_self->Id, @{$merged_users->Content}] );
+
     $canonical_self->SetComments( join "\n", grep /\S/,
         $canonical_self->Comments,
         "Merged into ". $merge->EmailAddress ." (". $merge->id .")",
@@ -202,6 +219,13 @@ sub UnMerge {
         $merge->Comments,
         $self->EmailAddress ." (". $self->id .") unmerged from this user",
     );
+    my $merged_users = $merge->GetMergedUsers;
+    my @remaining_users = grep { $_ != $self->Id } @{$merged_users->Content};
+    if (@remaining_users) {
+        $merged_users->SetContent(\@remaining_users);
+    } else {
+        $merged_users->Delete;
+    }
 
     return ($merge->id, "Unmerged from @{[$merge->EmailAddress]}");
 }
