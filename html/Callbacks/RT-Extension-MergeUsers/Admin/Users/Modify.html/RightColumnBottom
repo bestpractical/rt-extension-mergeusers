@@ -49,11 +49,19 @@
 <&| /Widgets/TitleBox, title => loc('Merge user') &>
 <p class="error"><% $result %></p>
 % my ($EffectiveId) = $UserObj->Attributes->Named("EffectiveId");
+% my $MergedUsers = $UserObj->FirstAttribute('MergedUsers');
 % if ($EffectiveId) {
 This user has been merged with <a href="Modify.html?id=<% $EffectiveId->Content %>">
 % my $real = RT::User->new($session{'CurrentUser'});
 % $real->Load($EffectiveId->Content);
 <% $real->EmailAddress %></a>; <input type="submit" name="Unmerge" value="Unmerge" />
+% } elsif ($MergedUsers) {
+The following users have been merged into this user:<br>
+%   foreach my $user_id (@{$MergedUsers->Content}) {
+%       my $user = RT::User->new($session{'CurrentUser'});
+%       $user->LoadOriginal(Id => $user_id);
+<% $user->EmailAddress %><input type="submit" name="Unmerge<%$user_id%>" value="Unmerge"><br>
+%   }
 % } else {
 Merge this user into: <input name="MergeUser" value="" />
 % }
@@ -63,7 +71,15 @@ my ($id, $result);
 if ($MergeUser) {
     ($id, $result) = $UserObj->MergeInto($MergeUser);
 } elsif ($Unmerge) {
-    $UserObj->UnMerge();
+    ($id, $result) = $UserObj->UnMerge();
+}
+
+foreach my $key (keys %ARGS) {
+    if ($key =~ /Unmerge(\d+)/) {
+        my $merged_user = RT::User->new($session{'CurrentUser'});
+        $merged_user->LoadOriginal( id => $1 );
+        ($id, $result) = $merged_user->UnMerge()
+    }
 }
 </%init>
 <%args>
