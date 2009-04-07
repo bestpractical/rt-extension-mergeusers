@@ -1,4 +1,5 @@
 bin/rt-merge-users
+bin/rt-update-merged-users
 Changes
 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom
 inc/Module/Install.pm
@@ -8,6 +9,7 @@ inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/RTx.pm
+inc/Module/Install/Substitute.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/RT/Extension/MergeUsers.pm
