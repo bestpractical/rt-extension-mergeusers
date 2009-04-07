@@ -3,12 +3,14 @@
 use strict;
 use warnings;
 
-my $usage = "usage: perl -I/opt/rt3/local/lib -I/opt/rt3/lib $0 <user> <into>";
+my $usage = "usage: perl $0 <user> <into>";
 
 my ($from, $into) = @ARGV;
 die "\n$usage\n" unless $from && $into;
 
-eval { require RT } or die "$@\n\n$usage\n";
+### after: use lib qw(@RT_LIB_PATH@);
+use lib qw(/opt/rt3/local/lib /opt/rt3/lib);
+use RT;
 RT::LoadConfig();
 RT::Init();
 
