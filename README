@@ -17,6 +17,9 @@ For 3.8
     Add RT::Extension::MergeUsers to your /opt/rt3/etc/RT_SiteConfig.pm file
     Set(@Plugins, qw(RT::Extension::MergeUsers));
 
+    If you have more than one Plugin enabled, you must enable them as one 
+    Set(@Plugins, qw(Foo Bar)); command
+
 UPGRADING
 
 If you are upgrading from 0.03_01 or earlier, you must run rt-upgrade-merged-users
