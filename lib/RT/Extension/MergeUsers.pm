@@ -48,7 +48,7 @@ use warnings; no warnings qw(redefine);
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '0.03_02';
+our $VERSION = '0.03';
 
 package RT::User;
 

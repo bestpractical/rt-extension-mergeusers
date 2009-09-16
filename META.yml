@@ -2,8 +2,12 @@
 abstract: 'Merges two users into the same effective user'
 author:
   - 'Alex Vandiver <alexmv@bestpractical.com>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.78'
+generated_by: 'Module::Install version 0.91'
 license: 'GPL version 2'
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,4 +20,4 @@ no_index:
     - t
 requires:
   Hook::LexWrap: 0
-version: 0.03_02
+version: 0.03
