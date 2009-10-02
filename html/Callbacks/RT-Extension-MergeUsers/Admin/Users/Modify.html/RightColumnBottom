@@ -47,7 +47,7 @@
 %# END BPS TAGGED BLOCK }}}
 <br />
 <&| /Widgets/TitleBox, title => loc('Merge user') &>
-<p class="error"><% $result %></p>
+<p class="error"><% $result||'' %></p>
 % my ($EffectiveId) = $UserObj->Attributes->Named("EffectiveId");
 % my $MergedUsers = $UserObj->FirstAttribute('MergedUsers');
 % if ($EffectiveId) {

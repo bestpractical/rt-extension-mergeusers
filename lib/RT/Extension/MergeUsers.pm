@@ -190,11 +190,11 @@ sub MergeInto {
     $merged_users->SetContent( [$canonical_self->Id, @{$merged_users->Content}] );
 
     $canonical_self->SetComments( join "\n", grep /\S/,
-        $canonical_self->Comments,
+        $canonical_self->Comments||'',
         "Merged into ". $merge->EmailAddress ." (". $merge->id .")",
     );
     $merge->SetComments(join "\n", grep /\S/,
-        $merge->Comments,
+        $merge->Comments||'',
         $canonical_self->EmailAddress." (".$canonical_self->id.") merged into this user",
     );
     return (1, "Merged users successfuly");
@@ -211,7 +211,7 @@ sub UnMerge {
 
     $current->Delete;
     $self->SetComments( join "\n", grep /\S/,
-        $self->Comments,
+        $self->Comments||'',
         "Unmerged from ". $merge->EmailAddress ." (".$merge->id.")",
     );
 
