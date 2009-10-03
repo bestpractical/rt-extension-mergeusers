@@ -206,6 +206,10 @@ sub UnMerge {
     my ($current) = $self->Attributes->Named("EffectiveId");
     return (0, "Not a merged user") unless $current;
 
+    # flush the cache, or the Sets below will
+    # clobber $self
+    delete $EFFECTIVE_ID_CACHE{$self->Id};
+
     my $merge = RT::User->new($RT::SystemUser);
     $merge->Load( $current->Content );
 
