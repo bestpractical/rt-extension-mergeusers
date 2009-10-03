@@ -223,6 +223,7 @@ sub UnMerge {
         $merge->Comments,
         $self->EmailAddress ." (". $self->id .") unmerged from this user",
     );
+
     my $merged_users = $merge->GetMergedUsers;
     my @remaining_users = grep { $_ != $self->Id } @{$merged_users->Content};
     if (@remaining_users) {
@@ -231,7 +232,7 @@ sub UnMerge {
         $merged_users->Delete;
     }
 
-    return ($merge->id, "Unmerged from @{[$merge->EmailAddress]}");
+    return ($merge->id, "Unmerged @{[$self->NameAndEmail]} from @{[$merge->NameAndEmail]}");
 }
 
 sub SetEmailAddress {
@@ -251,6 +252,18 @@ sub SetEmailAddress {
     }
 
     return $self->_Set( Field => 'EmailAddress', Value => $value );
+}
+
+sub NameAndEmail {
+    my $self = shift;
+    my $name = $self->Name;
+    my $email = $self->EmailAddress;
+
+    if ($name eq $email) {
+        return $email;
+    } else {
+        return "$name <$email>";
+    }
 }
 
 package RT::Users;
