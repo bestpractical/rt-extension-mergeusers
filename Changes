@@ -1,3 +1,9 @@
+0.04_01
+
+    Fix bug in cache and unmerging
+    Apply modified patch from Jason A Smith to make it clearer
+     which users are being affected.
+
 0.03
 
     Release updates from 0.03 prereleases 

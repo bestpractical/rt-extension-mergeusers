@@ -20,4 +20,4 @@ no_index:
     - t
 requires:
   Hook::LexWrap: 0
-version: 0.03
+version: 0.04_01
