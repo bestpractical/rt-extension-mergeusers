@@ -11,6 +11,9 @@ To install:
 
     perl Makefile.PL
     make install
+    clear your mason cache
+        most often this would be rm -rf /opt/rt3/var/mason_data/*
+    restart apache
 
 For 3.8
 
