@@ -7,8 +7,8 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
-license: 'GPL version 2'
+generated_by: 'Module::Install version 0.97'
+license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
@@ -20,4 +20,7 @@ no_index:
     - t
 requires:
   Hook::LexWrap: 0
+  perl: 5.8.3
+resources:
+  license: http://opensource.org/licenses/gpl-license.php
 version: 0.04_01
