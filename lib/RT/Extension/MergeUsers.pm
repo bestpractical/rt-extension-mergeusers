@@ -226,6 +226,9 @@ sub MergeInto {
     return (0, "User @{[$canonical_self->Name]} has already been merged")
            if defined $new and $new->Content == $canonical_self->id;
 
+    # clean the cache
+    delete $EFFECTIVE_ID_CACHE{$self->id};
+
     # do the merge
     $canonical_self->SetAttribute(
         Name => "EffectiveId",
@@ -255,7 +258,7 @@ sub UnMerge {
 
     # flush the cache, or the Sets below will
     # clobber $self
-    delete $EFFECTIVE_ID_CACHE{$self->Id};
+    delete $EFFECTIVE_ID_CACHE{$self->id};
 
     my $merge = RT::User->new($RT::SystemUser);
     $merge->Load( $current->Content );
