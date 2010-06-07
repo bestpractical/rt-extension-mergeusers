@@ -352,4 +352,6 @@ Alex Vandiver E<lt>alexmv@bestpractical.comE<gt>
 
 GPL version 2.
 
+=cut
+
 1;
