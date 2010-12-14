@@ -1,3 +1,7 @@
+0.04
+    Also clear cache when merging
+    Update docs
+
 0.04_01
 
     Fix bug in cache and unmerging
