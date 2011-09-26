@@ -2,3 +2,6 @@ Makefile
 blib
 pm_to_blib
 *.swp
+*.bak
+/MY*
+/RT-Extension-MergeUsers*
