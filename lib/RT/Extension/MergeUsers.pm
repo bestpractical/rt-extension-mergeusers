@@ -329,8 +329,7 @@ sub Next {
     my $self = shift;
     
     my $user = $self->SUPER::Next(@_);
-    return unless ($user && $user->id);
-    unless ($user) {
+    unless ($user and $user->id) {
         $self->{seen_users} = undef;
         return undef;
     }   
