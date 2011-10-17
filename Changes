@@ -1,3 +1,9 @@
+0.06
+    Actually clear the seen_users cache when we get undef back from SUPER::Next
+
+0.05
+    Update packaging and install infrastructure for RT 4
+
 0.04
     Also clear cache when merging
     Update docs
