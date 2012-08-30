@@ -289,8 +289,8 @@ sub SetEmailAddress {
     my $self = shift;
     my $value = shift;
 
-    return ( 0, $self->loc('Email address in use') )
-        unless $self->ValidateEmailAddress( $value );
+    my ( $val, $msg ) = $self->ValidateEmailAddress($value);
+    return ( 0, $msg || $self->loc('Email address in use') ) unless $val;
 
     # if value is valid then either there is no user or
     # user is merged into this one
