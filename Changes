@@ -1,3 +1,7 @@
+0.07 Thu Aug 30 12:09:31 EST 2012
+
+    Fix bug of "user email address destroys matching address in other ouser"(#70641)
+
 0.06
     Actually clear the seen_users cache when we get undef back from SUPER::Next
 
