@@ -2,11 +2,9 @@
 
 use strict;
 use warnings;
-use Test::More tests => 8;
-use RT::Test;
-
-RT->Config->Set('Plugins',qw(RT::Extension::MergeUsers));
-use_ok('RT::Extension::MergeUsers');
+use RT::Test
+    tests   => 'no_declare',
+    testing => 'RT::Extension::MergeUsers';
 
 my ($id, $message);
 
@@ -40,4 +38,4 @@ ok($id, "Successfully merges users? $message");
     ok(!$user->EmailAddress, "secondary record has no email");
 }
 
-1;
+done_testing;

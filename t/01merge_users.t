@@ -1,15 +1,11 @@
 #!/sw/bin/perl5.8.6
 
 use strict;
-use Test::More tests => 16;
-use RT::Test;
-
-RT->Config->Set('Plugins',qw(RT::Extension::MergeUsers));
+use RT::Test
+    tests   => 'no_declare',
+    testing => 'RT::Extension::MergeUsers';
 
 my ($id, $message);
-
-# make sure the extension is installed
-use_ok('RT::Extension::MergeUsers');
 
 # create N unique users  ($$ == our pid)
 my $primary_user = RT::User->new($RT::SystemUser);
@@ -86,4 +82,4 @@ my $ticket2 = RT::Ticket->new($RT::SystemUser);
                      );
 ok($ticket2->RequestorAddresses =~ /secondary-$$\@example.com/, "Unmerges tickets properly: @{[$ticket2->RequestorAddresses]}");
 
-1;
+done_testing;
