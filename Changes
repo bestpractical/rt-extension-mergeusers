@@ -1,3 +1,11 @@
+0.08 Mon Feb 25 13:33:48 PST 2013
+
+    * Move tests to author-only; they require having an RT installed somewhere
+    * Switch to .in files for substitution so as not to trash version-controlled files
+    * Record the merged/mergee's user Name if EmailAddress is empty
+    * Unset EmailAddress by setting the empty string rather than undef
+    * Switch to modern RT::Test infrastructure for testing plugins
+
 0.07 Thu Aug 30 12:09:31 EST 2012
 
     Fix bug of "user email address destroys matching address in other ouser"(#70641)

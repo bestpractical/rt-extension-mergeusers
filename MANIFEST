@@ -1,5 +1,5 @@
-bin/rt-merge-users
-bin/rt-update-merged-users
+bin/rt-merge-users.in
+bin/rt-update-merged-users.in
 Changes
 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom
 inc/Module/AutoInstall.pm
@@ -19,7 +19,8 @@ inc/Module/Install/WriteAll.pm
 lib/RT/Extension/MergeUsers.pm
 Makefile.PL
 MANIFEST			This list of files
+MANIFEST.SKIP
 META.yml
 README
-t/01merge_users.t
-t/change_email.t
+xt/01merge_users.t
+xt/change_email.t
