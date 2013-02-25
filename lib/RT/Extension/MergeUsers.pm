@@ -298,7 +298,7 @@ sub SetEmailAddress {
     $tmp->LoadOriginal( EmailAddress => $value );
     if ( $tmp->id && $tmp->id != $self->id ) {
         # there is a different user record
-        $tmp->_Set( Field => 'EmailAddress', Value => undef );
+        $tmp->_Set( Field => 'EmailAddress', Value => "" );
     }
 
     return $self->_Set( Field => 'EmailAddress', Value => $value );
