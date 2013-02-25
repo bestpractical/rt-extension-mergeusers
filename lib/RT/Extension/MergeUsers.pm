@@ -241,11 +241,11 @@ sub MergeInto {
 
     $canonical_self->SetComments( join "\n", grep /\S/,
         $canonical_self->Comments||'',
-        "Merged into ". $merge->EmailAddress ." (". $merge->id .")",
+        "Merged into ". ($merge->EmailAddress || $merge->Name)." (". $merge->id .")",
     );
     $merge->SetComments(join "\n", grep /\S/,
         $merge->Comments||'',
-        $canonical_self->EmailAddress." (".$canonical_self->id.") merged into this user",
+        ($canonical_self->EmailAddress || $canonical_self->Name)." (".$canonical_self->id.") merged into this user",
     );
     return (1, "Merged users successfuly");
 }
@@ -266,12 +266,12 @@ sub UnMerge {
     $current->Delete;
     $self->SetComments( join "\n", grep /\S/,
         $self->Comments||'',
-        "Unmerged from ". $merge->EmailAddress ." (".$merge->id.")",
+        "Unmerged from ". ($merge->EmailAddress || $merge->Name) ." (".$merge->id.")",
     );
 
     $merge->SetComments(join "\n", grep /\S/,
         $merge->Comments,
-        $self->EmailAddress ." (". $self->id .") unmerged from this user",
+        ($self->EmailAddress || $self->Name) ." (". $self->id .") unmerged from this user",
     );
 
     my $merged_users = $merge->GetMergedUsers;
