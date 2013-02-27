@@ -40,6 +40,21 @@ ok(!$id, "Doesn't merge a user into itself? $message");
 ($id, $message) = $secondary_user->MergeInto($primary_user);
 ok($id, "Successfully merges users? $message");
 
+# Check that the comments are useful
+{
+    my $from = RT::User->new( $RT::SystemUser );
+    $from->LoadOriginal( id => $secondary_user->id );
+    is( $from->Comments, "Merged into primary-$$\@example.com (".$primary_user->id.")",
+        "Comments contain the right user that was merged into"
+    );
+
+    my $into = RT::User->new( $RT::SystemUser );
+    $into->LoadOriginal( id => $primary_user->id );
+    is( $into->Comments, "secondary-$$\@example.com (".$secondary_user->id.") merged into this user",
+        "Comments contain the right user that was merged in"
+    );
+}
+
 # recognizes already-merged users
 ($id, $message) = $secondary_user->MergeInto($primary_user);
 ok(!$id, "Recognizes secondary as child? $message");

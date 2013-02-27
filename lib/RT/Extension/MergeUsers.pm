@@ -223,13 +223,14 @@ sub MergeInto {
     my $merged_users = $merge->GetMergedUsers;
     $merged_users->SetContent( [$canonical_self->Id, @{$merged_users->Content}] );
 
-    $canonical_self->SetComments( join "\n", grep /\S/,
-        $canonical_self->Comments||'',
-        "Merged into ". ($merge->EmailAddress || $merge->Name)." (". $merge->id .")",
-    );
     $merge->SetComments(join "\n", grep /\S/,
         $merge->Comments||'',
         ($canonical_self->EmailAddress || $canonical_self->Name)." (".$canonical_self->id.") merged into this user",
+    );
+
+    $canonical_self->SetComments( join "\n", grep /\S/,
+        $canonical_self->Comments||'',
+        "Merged into ". ($merge->EmailAddress || $merge->Name)." (". $merge->id .")",
     );
     return (1, "Merged users successfuly");
 }
