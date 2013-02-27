@@ -122,15 +122,7 @@ sub CanonicalizeEmailAddress {
     my $canonical_user = RT::User->new($RT::SystemUser);
     $canonical_user->LoadByCols( EmailAddress => $address );
     return $address unless $canonical_user->id;
-
-    # if we got a user, check for a parent
-    my ($effective_id) = $canonical_user->Attributes->Named("EffectiveId");
-    return $address unless $effective_id && $effective_id->id;
-
-    $canonical_user->LoadByCols( id => $effective_id->Content );
-    return $address unless $canonical_user->id;
-
-    # is there another parent user above this one?
+    return $address unless $canonical_user->EmailAddress ne $address;
     return $canonical_user->CanonicalizeEmailAddress(
         $canonical_user->EmailAddress
     );
