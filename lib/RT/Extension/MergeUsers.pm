@@ -199,21 +199,13 @@ sub MergeInto {
         $merge->Load($user);
         return (0, "Could not load user '$user'") unless $merge->id;
     }
+    return (0, "Could not load user to be merged") unless $merge->id;
 
     # Get copies of the canonicalized users
     my $email;
-    if (defined $merge->Attributes->Named('EffectiveId')) {
-        $email = $merge->CanonicalizeEmailAddress($merge->EmailAddress);
-        $merge->LoadByEmail($email);
-    }
-    return (0, "Could not load user to be merged") unless $merge->id;
 
     my $canonical_self = RT::User->new($RT::SystemUser);
     $canonical_self->Load($self->id);
-    if (defined $canonical_self->Attributes->Named('EffectiveId')) {
-        $email = $canonical_self->CanonicalizeEmailAddress($canonical_self->EmailAddress);
-        $canonical_self->LoadByEmail($email);
-    }
     return (0, "Could not load user to merge into") unless $canonical_self->id;
 
     # No merging into yourself!
