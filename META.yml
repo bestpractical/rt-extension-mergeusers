@@ -20,7 +20,6 @@ no_index:
     - inc
     - xt
 requires:
-  Hook::LexWrap: 0
   perl: 5.8.3
 resources:
   license: http://opensource.org/licenses/gpl-license.php

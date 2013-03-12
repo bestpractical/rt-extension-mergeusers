@@ -4,7 +4,6 @@ RTx('RT-Extension-MergeUsers');
 all_from       ('lib/RT/Extension/MergeUsers.pm');
 readme_from    ('lib/RT/Extension/MergeUsers.pm');
 
-requires        ('Hook::LexWrap');
 requires_rt('3.8.3');
 
 my ($lib_path) = $INC{'RT.pm'} =~ /^(.*)[\\\/]/;

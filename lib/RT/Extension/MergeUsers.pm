@@ -102,13 +102,18 @@ package RT::User;
 our %EFFECTIVE_ID_CACHE;
 
 use RT::Interface::Web::Handler;
-use Hook::LexWrap;
 
-{ my $i = 0;
-wrap 'RT::Interface::Web::Handler::CleanupRequest', post => sub {
-    return if ++$i%100; # flush cache every N requests
-    %EFFECTIVE_ID_CACHE = ();
-}; }
+{
+    my $i = 0;
+
+    my $old_cleanup = \&RT::Interface::Web::Handler::CleanupRequest;
+    no warnings 'redefine';
+    *RT::Interface::Web::Handler::CleanupRequest = sub {
+        $old_cleanup->(@_);
+        return if ++$i % 100; # flush cache every N requests
+        %EFFECTIVE_ID_CACHE = ();
+    };
+}
 
 sub CanonicalizeEmailAddress {
     my $self = shift;
