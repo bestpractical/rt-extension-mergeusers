@@ -49,15 +49,15 @@
 <&| /Widgets/TitleBox, title => loc('Merge user') &>
 <p class="error"><% $result||'' %></p>
 % my ($EffectiveId) = $UserObj->Attributes->Named("EffectiveId");
-% my $MergedUsers = $UserObj->FirstAttribute('MergedUsers');
+% my @MergedUsers = @{$UserObj->GetMergedUsers->Content};
 % if ($EffectiveId) {
 This user has been merged with <a href="Modify.html?id=<% $EffectiveId->Content %>">
 % my $real = RT::User->new($session{'CurrentUser'});
 % $real->Load($EffectiveId->Content);
 <% $real->NameAndEmail %></a>; <input type="submit" name="Unmerge" value="Unmerge" />
-% } elsif ($MergedUsers) {
+% } elsif (@MergedUsers) {
 The following users have been merged into this user:<br>
-%   foreach my $user_id (@{$MergedUsers->Content}) {
+%   foreach my $user_id (@MergedUsers) {
 %       my $user = RT::User->new($session{'CurrentUser'});
 %       $user->LoadOriginal(Id => $user_id);
 <% $user->NameAndEmail %><input type="submit" name="Unmerge<%$user_id%>" value="Unmerge"><br>
