@@ -67,6 +67,8 @@ Merge this user into: <input name="MergeUser" value="" />
 % }
 </&>
 <%init>
+return unless $UserObj->id;
+
 my ($id, $result);
 if ($MergeUser) {
     ($id, $result) = $UserObj->MergeInto($MergeUser);
