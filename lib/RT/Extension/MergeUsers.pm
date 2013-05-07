@@ -142,7 +142,7 @@ sub LoadByCols {
         my $effective_id = RT::Attribute->new( $RT::SystemUser );
         $effective_id->LoadByCols(
             Name       => 'EffectiveId',
-            ObjectType => ref($self) || $self,
+            ObjectType => __PACKAGE__,
             ObjectId   => $oid,
         );
         if ( $effective_id->id && $effective_id->Content && $effective_id->Content != $oid ) {
