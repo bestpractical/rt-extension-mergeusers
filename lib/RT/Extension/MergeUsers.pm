@@ -333,7 +333,12 @@ sub Next {
     return $self->Next() if ($self->{seen_users}->{$user->id}++);
 
     return $user;
+}
 
+sub GotoFirstItem {
+    my $self = shift;
+    $self->{seen_users} = undef;
+    $self->GotoItem(0);
 }
 
 =head1 AUTHOR
