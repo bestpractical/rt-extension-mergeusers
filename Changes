@@ -1,3 +1,12 @@
+0.09 Wed Jun 26 15:06:42 EST 2013
+
+   * Update Module::Install and Module::Install::RTx
+   * Fix "Merged into ..." messages in user comments
+   * Remove Hook::LexWrap, to allow useful stacktraces
+   * Hook for user summary (RT 4.2)
+   * Fix a bug with the unique'ing code in RT::Users
+   * Fix for loading from a RT::CurrentUser, not just an RT::User
+
 0.08 Mon Feb 25 13:33:48 PST 2013
 
     * Move tests to author-only; they require having an RT installed somewhere
