@@ -63,7 +63,7 @@ The following users have been merged into this user:<br>
 <% $user->NameAndEmail %><input type="submit" name="Unmerge<%$user_id%>" value="Unmerge"><br>
 %   }
 % } else {
-Merge this user into: <input name="MergeUser" value="" />
+Merge this user into: <input name="MergeUser" data-autocomplete="Users" data-autocomplete-return="Name" value="" />
 % }
 </&>
 <%init>
