@@ -2,6 +2,7 @@ bin/rt-merge-users.in
 bin/rt-update-merged-users.in
 Changes
 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom
+html/Callbacks/RT-Extension-MergeUsers/User/Elements/TicketList/ModifyWatcherSQL
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
