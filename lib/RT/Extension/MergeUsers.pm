@@ -341,16 +341,6 @@ sub GotoFirstItem {
     $self->GotoItem(0);
 }
 
-sub _RecordCount {
-    my $self = shift;
-    return 0 unless defined $self->{'items'};
-
-    my %seen;
-    $seen{$_->id}++ for @{ $self->{'items'} };
-    return scalar keys %seen;
-}
-
-
 =head1 AUTHOR
 
 Alex Vandiver E<lt>alexmv@bestpractical.comE<gt>
