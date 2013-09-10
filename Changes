@@ -1,4 +1,11 @@
+0.11 Tue Sep 10 14:42:46 MSK 2013
+
+    * For every merged user in a collection one user at the end of
+      the collection was skipped, for example in owners drop down,
+      admin interface or in autocompletion lists.
+
 0.10 Fri Aug  2 15:34:06 PDT 2013
+
     * Enable user autocomplete on the "Merge user into" form for RT 4.2
     * Correct a packaging error in MANIFEST in the previous release
 
