@@ -124,7 +124,7 @@ sub CanonicalizeEmailAddress {
     }
 
     # get the user whose email address this is
-    my $canonical_user = RT::User->new($RT::SystemUser);
+    my $canonical_user = RT::User->new( $self->CurrentUser );
     $canonical_user->LoadByCols( EmailAddress => $address );
     return $address unless $canonical_user->id;
     return $address unless $canonical_user->EmailAddress ne $address;
@@ -187,12 +187,12 @@ sub MergeInto {
     if (ref $user) {
         return (0, "User is not loaded") unless $user->id;
 
-        $merge = RT::User->new($RT::SystemUser);
+        $merge = RT::User->new( $self->CurrentUser );
         $merge->Load($user->id);
         return (0, "Could not reload user #". $user->id)
             unless $merge->id;
     } else {
-        $merge = RT::User->new($RT::SystemUser);
+        $merge = RT::User->new( $self->CurrentUser );
         $merge->Load($user);
         return (0, "Could not load user '$user'") unless $merge->id;
     }
@@ -201,7 +201,7 @@ sub MergeInto {
     # Get copies of the canonicalized users
     my $email;
 
-    my $canonical_self = RT::User->new($RT::SystemUser);
+    my $canonical_self = RT::User->new( $self->CurrentUser );
     $canonical_self->Load($self->id);
     return (0, "Could not load user to merge into") unless $canonical_self->id;
 
@@ -250,7 +250,7 @@ sub UnMerge {
     # clobber $self
     delete $EFFECTIVE_ID_CACHE{$self->id};
 
-    my $merge = RT::User->new($RT::SystemUser);
+    my $merge = RT::User->new( $self->CurrentUser );
     $merge->Load( $current->Content );
 
     $current->Delete;
@@ -284,7 +284,7 @@ sub SetEmailAddress {
 
     # if value is valid then either there is no user or
     # user is merged into this one
-    my $tmp = RT::User->new($RT::SystemUser);
+    my $tmp = RT::User->new( $self->CurrentUser );
     $tmp->LoadOriginal( EmailAddress => $value );
     if ( $tmp->id && $tmp->id != $self->id ) {
         # there is a different user record
