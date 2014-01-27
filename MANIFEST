@@ -25,3 +25,4 @@ META.yml
 README
 xt/01merge_users.t
 xt/change_email.t
+xt/collection.t
