@@ -1,13 +1,13 @@
 0.11 Tue Sep 10 14:42:46 MSK 2013
 
-    * For every merged user in a collection one user at the end of
-      the collection was skipped, for example in owners drop down,
-      admin interface or in autocompletion lists.
+   * For every merged user in a collection one user at the end of
+     the collection was skipped, for example in owners drop down,
+     admin interface or in autocompletion lists.
 
 0.10 Fri Aug  2 15:34:06 PDT 2013
 
-    * Enable user autocomplete on the "Merge user into" form for RT 4.2
-    * Correct a packaging error in MANIFEST in the previous release
+   * Enable user autocomplete on the "Merge user into" form for RT 4.2
+   * Correct a packaging error in MANIFEST in the previous release
 
 0.09 Wed Jun 26 15:06:42 EST 2013
 
@@ -20,49 +20,52 @@
 
 0.08 Mon Feb 25 13:33:48 PST 2013
 
-    * Move tests to author-only; they require having an RT installed somewhere
-    * Switch to .in files for substitution so as not to trash version-controlled files
+    * Move tests to author-only; they require having an RT installed
+      somewhere
+    * Switch to .in files for substitution so as not to trash
+      version-controlled files
     * Record the merged/mergee's user Name if EmailAddress is empty
     * Unset EmailAddress by setting the empty string rather than undef
     * Switch to modern RT::Test infrastructure for testing plugins
 
 0.07 Thu Aug 30 12:09:31 EST 2012
 
-    Fix bug of "user email address destroys matching address in other ouser"(#70641)
+    * Fix bug of "user email address destroys matching address in other
+      user" (#70641)
 
 0.06
-    Actually clear the seen_users cache when we get undef back from SUPER::Next
+
+    * Actually clear the seen_users cache when we get undef back from SUPER::Next
 
 0.05
-    Update packaging and install infrastructure for RT 4
+
+    * Update packaging and install infrastructure for RT 4
 
 0.04
-    Also clear cache when merging
-    Update docs
+    * Also clear cache when merging
+    * Update docs
 
 0.04_01
 
-    Fix bug in cache and unmerging
-    Apply modified patch from Jason A Smith to make it clearer
-     which users are being affected.
+    * Fix bug in cache and unmerging
+    * Apply modified patch from Jason A Smith to make it clearer which
+      users are being affected.
 
 0.03
 
-    Release updates from 0.03 prereleases 
+    * Release updates from 0.03 prereleases
 
 0.03_02 2009-04-06 Tue 17:08 -0400 falcone
 
-    Track merged users bidirectionally
-    Allow unmerging users from the main user's modification page
-    Show errors/results from merging
-    Add new script for adding bidirectional attributes to old installs
+    * Track merged users bidirectionally
+    * Allow unmerging users from the main user's modification page
+    * Show errors/results from merging
+    * Add new script for adding bidirectional attributes to old installs
 
 0.03_01 2008-11-23 Sun 18:51 -0500 falcone
 
-   remove User_Overlay and Users_Overlay to avoid
-   conflicts with other plugins 
-
-   Use callbacks available in 3.6/3.8 rather than
-   overriding the whole Admin/Users/Modify.html template
-
-   Upgrade Module::Install::RTx to work with 3.8
+    * remove User_Overlay and Users_Overlay to avoid conflicts with
+      other plugins
+    * Use callbacks available in 3.6/3.8 rather than overriding the
+      whole Admin/Users/Modify.html template
+    * Upgrade Module::Install::RTx to work with 3.8
