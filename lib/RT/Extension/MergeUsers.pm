@@ -124,7 +124,7 @@ sub CanonicalizeEmailAddress {
     }
 
     # get the user whose email address this is
-    my $canonical_user = RT::User->new( $self->CurrentUser );
+    my $canonical_user = RT::User->new( $RT::SystemUser );
     $canonical_user->LoadByCols( EmailAddress => $address );
     return $address unless $canonical_user->id;
     return $address unless $canonical_user->EmailAddress ne $address;
