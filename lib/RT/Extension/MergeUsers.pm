@@ -49,7 +49,7 @@ use warnings; no warnings qw(redefine);
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '0.12_01';
+our $VERSION = '0.12_02';
 
 =head1 NAME
 
