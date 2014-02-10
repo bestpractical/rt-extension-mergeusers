@@ -1,6 +1,7 @@
 0.12
 
    * Merge users as the current user, not always the superuser
+   * Propagate Disabled bit to users that are merged in
 
 0.11 Tue Sep 10 14:42:46 MSK 2013
 

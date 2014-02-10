@@ -30,7 +30,7 @@ INSTALLATION
         Add RT::Extension::MergeUsers to your /opt/rt3/etc/RT_SiteConfig.pm file
         Set(@Plugins, qw(RT::Extension::MergeUsers));
 
-        If you have more than one Plugin enabled, you must enable them as one 
+        If you have more than one Plugin enabled, you must enable them as one
         Set(@Plugins, qw(Foo Bar)); command
 
 UPGRADING
