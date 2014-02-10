@@ -341,6 +341,28 @@ sub GotoFirstItem {
     $self->GotoItem(0);
 }
 
+
+package RT::Principal;
+
+sub SetDisabled {
+    my $self = shift;
+    my $value = shift;
+
+    my ($ret, $msg) = $self->_Set( Field => "Disabled", Value => $value );
+    return ($ret, $msg) unless $ret;
+
+    return ($ret, $msg) unless $self->IsUser;
+
+    for my $id (@{$self->Object->GetMergedUsers->Content}) {
+        my $user = RT::User->new( $self->CurrentUser );
+        $user->LoadOriginal( id => $id );
+        $user->PrincipalObj->_Set( Field => "Disabled", Value => $value );
+    }
+
+    return ($ret, $msg);
+}
+
+
 =head1 AUTHOR
 
 Alex Vandiver E<lt>alexmv@bestpractical.comE<gt>
