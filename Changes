@@ -1,4 +1,4 @@
-0.12
+0.12 Thu Mar 27 12:52:17 EST 2014
 
    * Merge users as the current user, not always the superuser
    * Propagate Disabled bit to users that are merged in

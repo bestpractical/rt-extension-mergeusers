@@ -24,7 +24,8 @@ substitute( {
     { sufix => '.in' },
     'bin/rt-update-merged-users',
     'bin/rt-merge-users',
-);  
+);
 
+sign();
 auto_install();
 WriteAll();
