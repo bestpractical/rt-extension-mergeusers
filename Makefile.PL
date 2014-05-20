@@ -26,6 +26,8 @@ substitute( {
     'bin/rt-merge-users',
 );
 
+no_index( package => 'RT::User', 'RT::Users', 'RT::Principal');
+
 sign();
 auto_install();
 WriteAll();
