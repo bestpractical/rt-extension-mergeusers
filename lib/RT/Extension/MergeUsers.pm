@@ -147,7 +147,8 @@ sub LoadByCols {
         );
         if ( $effective_id->id && $effective_id->Content && $effective_id->Content != $oid ) {
             $self->LoadByCols( id => $effective_id->Content );
-            $EFFECTIVE_ID_CACHE{ $oid } = $self->id;
+            $EFFECTIVE_ID_CACHE{ $oid } = $self->id
+                if $self->Id;
         } else {
             $EFFECTIVE_ID_CACHE{ $oid } = undef;
         }
@@ -156,6 +157,13 @@ sub LoadByCols {
         $self->LoadByCols( id => $EFFECTIVE_ID_CACHE{ $oid } );
     }
 
+    if ( not $self->Id ){
+        # Unable to load the effective user, so return actual user
+        RT::Logger->warning("Unable to load user by effective id. "
+            . "You may need to run rt-clean-merged-users if some users have been "
+            . "deleted or shredded.");
+        $self->SUPER::LoadByCols( Id => $oid );
+    }
     return $self->id;
 }
 
@@ -327,10 +335,16 @@ sub Next {
 
 
     my ($effective_id) = $user->Attributes->Named("EffectiveId");
+    my $original_id = $user->Id;
     if ($effective_id && $effective_id->Content && $effective_id->Content != $user->id) {
         $user->LoadByCols(id =>$effective_id->Content);
     }
-    return $self->Next() if ($self->{seen_users}->{$user->id}++);
+    return $self->Next() if ($user->Id and $self->{seen_users}->{$user->id}++);
+
+    # Failed to load the effective user record for some reason, so expose
+    # this user again.
+    $user->LoadByCols( Id => $original_id )
+        unless $user->Id;
 
     return $user;
 }
