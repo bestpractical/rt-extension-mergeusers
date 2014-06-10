@@ -24,6 +24,7 @@ substitute( {
     { sufix => '.in' },
     'bin/rt-update-merged-users',
     'bin/rt-merge-users',
+    'bin/rt-clean-merged-users',
 );
 
 no_index( package => 'RT::User', 'RT::Users', 'RT::Principal');
