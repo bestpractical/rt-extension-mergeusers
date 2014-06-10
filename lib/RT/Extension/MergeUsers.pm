@@ -95,6 +95,17 @@ at a user that other users have been merged into. If you don't run this script,
 you'll have issues unmerging users. It can be safely run multiple times, it will
 only create Attributes as needed.
 
+=head1 UTILITIES
+
+=head2 rt-clean-merged-users
+
+When a user with another user merged into it is shredded,
+the attributes on that user are also shredded, but the
+merged user will remain, along with attributes that may point
+to the now missing user id. This script cleans up attributes
+if the merged-into user record is now gone. These users will then be
+converted back to regular unmerged users.
+
 =cut
 
 package RT::User;
