@@ -47,6 +47,9 @@ use 5.008003;
 use strict;
 use warnings; no warnings qw(redefine);
 
+# Explicitly load Shredder here so we can override RT::User::BeforeWipeout
+use RT::Shredder;
+
 package RT::Extension::MergeUsers;
 
 our $VERSION = '0.12';
@@ -67,6 +70,35 @@ which allow you to programmatically accomplish the same thing from your code.
 It also provides a version of L<CanonicalizeEmailAddress>, which means that
 all e-mail sent from secondary users is displayed as coming from the primary
 user.
+
+=head2 RT::Shredder and Merged Users
+
+Merging a user effectively makes it impossible to load the merged user
+directly. Attempting to access the old user resolves to the merged-into user.
+Because of this, MergeUsers has some extra code to help L<RT::Shredder>
+clean up these merged records to avoid leaving merged user records in the DB
+while removing the user they were merged into.
+
+When running L<RT::Shredder> on a user record with other users merged into it,
+the merged users are Unmerged before the initial user record is shredded.
+There are two options to handle these newly unmerged users:
+
+=over
+
+=item 1.
+
+Re-run your shredder command with the same or similar options. The unmerged
+user records will now be accessible and, depending on your shredder options,
+they will likely be shredded on the second run. If you have multiple
+layers of merged users, you may need to run shredder multiple times.
+
+=item 2.
+
+MergeUsers will log the unmerged users at the C<info> level so you can pull
+the user ids from the log and shred them manually. This is most likely to
+be useful if you are shredding one specific user (and all merged accounts).
+
+=back
 
 =head1 INSTALLATION
 
@@ -323,6 +355,28 @@ sub NameAndEmail {
     } else {
         return "$name <$email>";
     }
+}
+
+sub BeforeWipeout {
+    my $self = shift;
+    if( $self->Name =~ /^(RT_System|Nobody)$/ ) {
+        RT::Shredder::Exception::Info->throw('SystemObject');
+    }
+
+    # Check to see if this user has any other users merged into it
+    # Unmerge any merged users to break the connection to this
+    # soon-to-be-shredded user.
+    # The MergedUsers attribute on this user will be removed by Shredder.
+
+    my $merged_users = $self->GetMergedUsers;
+    foreach my $user_id ( @{$merged_users->Content} ){
+        my $merged_user = RT::User->new(RT->SystemUser);
+        $merged_user->LoadOriginal( id => $user_id );
+        my ($id, $result) = $merged_user->UnMerge();
+        RT::Logger->info($result);
+    }
+
+    return $self->SUPER::BeforeWipeout( @_ );
 }
 
 package RT::Users;
