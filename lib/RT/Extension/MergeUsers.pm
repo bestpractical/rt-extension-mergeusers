@@ -47,6 +47,9 @@ use 5.008003;
 use strict;
 use warnings; no warnings qw(redefine);
 
+# Explicitly load Shredder here so we can override RT::User::BeforeWipeout
+use RT::Shredder;
+
 package RT::Extension::MergeUsers;
 
 our $VERSION = '0.12';
@@ -67,6 +70,35 @@ which allow you to programmatically accomplish the same thing from your code.
 It also provides a version of L<CanonicalizeEmailAddress>, which means that
 all e-mail sent from secondary users is displayed as coming from the primary
 user.
+
+=head2 RT::Shredder and Merged Users
+
+Merging a user effectively makes it impossible to load the merged user
+directly. Attempting to access the old user resolves to the merged-into user.
+Because of this, MergeUsers has some extra code to help L<RT::Shredder>
+clean up these merged records to avoid leaving merged user records in the DB
+while removing the user they were merged into.
+
+When running L<RT::Shredder> on a user record with other users merged into it,
+the merged users are Unmerged before the initial user record is shredded.
+There are two options to handle these newly unmerged users:
+
+=over
+
+=item 1.
+
+Re-run your shredder command with the same or similar options. The unmerged
+user records will now be accessible and, depending on your shredder options,
+they will likely be shredded on the second run. If you have multiple
+layers of merged users, you may need to run shredder multiple times.
+
+=item 2.
+
+MergeUsers will log the unmerged users at the C<info> level so you can pull
+the user ids from the log and shred them manually. This is most likely to
+be useful if you are shredding one specific user (and all merged accounts).
+
+=back
 
 =head1 INSTALLATION
 
@@ -94,6 +126,17 @@ This script will create MergedUsers Attributes so RT can know when you're lookin
 at a user that other users have been merged into. If you don't run this script,
 you'll have issues unmerging users. It can be safely run multiple times, it will
 only create Attributes as needed.
+
+=head1 UTILITIES
+
+=head2 rt-clean-merged-users
+
+When a user with another user merged into it is shredded,
+the attributes on that user are also shredded, but the
+merged user will remain, along with attributes that may point
+to the now missing user id. This script cleans up attributes
+if the merged-into user record is now gone. These users will then be
+converted back to regular unmerged users.
 
 =cut
 
@@ -147,7 +190,8 @@ sub LoadByCols {
         );
         if ( $effective_id->id && $effective_id->Content && $effective_id->Content != $oid ) {
             $self->LoadByCols( id => $effective_id->Content );
-            $EFFECTIVE_ID_CACHE{ $oid } = $self->id;
+            $EFFECTIVE_ID_CACHE{ $oid } = $self->id
+                if $self->Id;
         } else {
             $EFFECTIVE_ID_CACHE{ $oid } = undef;
         }
@@ -156,6 +200,13 @@ sub LoadByCols {
         $self->LoadByCols( id => $EFFECTIVE_ID_CACHE{ $oid } );
     }
 
+    if ( not $self->Id ){
+        # Unable to load the effective user, so return actual user
+        RT::Logger->warning("Unable to load user by effective id. "
+            . "You may need to run rt-clean-merged-users if some users have been "
+            . "deleted or shredded.");
+        $self->SUPER::LoadByCols( Id => $oid );
+    }
     return $self->id;
 }
 
@@ -306,6 +357,28 @@ sub NameAndEmail {
     }
 }
 
+{
+    my $orig = RT::User->can('BeforeWipeout');
+    *RT::User::BeforeWipeout = sub {
+        my $self = shift;
+
+        # Check to see if this user has any other users merged into it
+        # Unmerge any merged users to break the connection to this
+        # soon-to-be-shredded user.
+        # The MergedUsers attribute on this user will be removed by Shredder.
+
+        my $merged_users = $self->GetMergedUsers;
+        foreach my $user_id ( @{$merged_users->Content} ){
+            my $merged_user = RT::User->new(RT->SystemUser);
+            $merged_user->LoadOriginal( id => $user_id );
+            my ($id, $result) = $merged_user->UnMerge();
+            RT::Logger->info($result);
+        }
+
+        return $orig->($self, @_);
+    };
+}
+
 package RT::Users;
 use RT::Users;
 
@@ -327,10 +400,16 @@ sub Next {
 
 
     my ($effective_id) = $user->Attributes->Named("EffectiveId");
+    my $original_id = $user->Id;
     if ($effective_id && $effective_id->Content && $effective_id->Content != $user->id) {
         $user->LoadByCols(id =>$effective_id->Content);
     }
-    return $self->Next() if ($self->{seen_users}->{$user->id}++);
+    return $self->Next() if ($user->Id and $self->{seen_users}->{$user->id}++);
+
+    # Failed to load the effective user record for some reason, so expose
+    # this user again.
+    $user->LoadByCols( Id => $original_id )
+        unless $user->Id;
 
     return $user;
 }
