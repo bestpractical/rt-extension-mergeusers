@@ -357,26 +357,26 @@ sub NameAndEmail {
     }
 }
 
-sub BeforeWipeout {
-    my $self = shift;
-    if( $self->Name =~ /^(RT_System|Nobody)$/ ) {
-        RT::Shredder::Exception::Info->throw('SystemObject');
-    }
+{
+    my $orig = RT::User->can('BeforeWipeout');
+    *RT::User::BeforeWipeout = sub {
+        my $self = shift;
 
-    # Check to see if this user has any other users merged into it
-    # Unmerge any merged users to break the connection to this
-    # soon-to-be-shredded user.
-    # The MergedUsers attribute on this user will be removed by Shredder.
+        # Check to see if this user has any other users merged into it
+        # Unmerge any merged users to break the connection to this
+        # soon-to-be-shredded user.
+        # The MergedUsers attribute on this user will be removed by Shredder.
 
-    my $merged_users = $self->GetMergedUsers;
-    foreach my $user_id ( @{$merged_users->Content} ){
-        my $merged_user = RT::User->new(RT->SystemUser);
-        $merged_user->LoadOriginal( id => $user_id );
-        my ($id, $result) = $merged_user->UnMerge();
-        RT::Logger->info($result);
-    }
+        my $merged_users = $self->GetMergedUsers;
+        foreach my $user_id ( @{$merged_users->Content} ){
+            my $merged_user = RT::User->new(RT->SystemUser);
+            $merged_user->LoadOriginal( id => $user_id );
+            my ($id, $result) = $merged_user->UnMerge();
+            RT::Logger->info($result);
+        }
 
-    return $self->SUPER::BeforeWipeout( @_ );
+        return $orig->($self, @_);
+    };
 }
 
 package RT::Users;
