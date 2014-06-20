@@ -2,7 +2,7 @@
 #
 # COPYRIGHT:
 #
-# This software is Copyright (c) 1996-2008 Best Practical Solutions, LLC
+# This software is Copyright (c) 1996-2014 Best Practical Solutions, LLC
 #                                          <sales@bestpractical.com>
 #
 # (Except where explicitly superseded by other copyright notices)
@@ -22,7 +22,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301 or visit their web page on the internet at
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
 #
 #
 # CONTRIBUTION SUBMISSION POLICY:
@@ -43,6 +45,7 @@
 # those contributions and any derivatives thereof.
 #
 # END BPS TAGGED BLOCK }}}
+
 use 5.008003;
 use strict;
 use warnings; no warnings qw(redefine);
@@ -52,7 +55,7 @@ use RT::Shredder;
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '0.12';
+our $VERSION = '1.00';
 
 =head1 NAME
 
@@ -102,30 +105,46 @@ be useful if you are shredding one specific user (and all merged accounts).
 
 =head1 INSTALLATION
 
-If you're upgrading then, as well, read L</UPGRADING> below.
+Be sure to also read L</UPGRADING> if you are upgrading.
 
-    perl Makefile.PL
-    make
-    make install
-    clear your mason cache
-        most often this would be rm -rf /opt/rt3/var/mason_data/*
-    restart apache
+=over
 
-For RT 3.8
+=item C<perl Makefile.PL>
 
-    Add RT::Extension::MergeUsers to your /opt/rt3/etc/RT_SiteConfig.pm file
+=item C<make>
+
+=item C<make install>
+
+May need root permissions
+
+=item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
+
+If you are using RT 4.2 or greater, add this line:
+
+    Plugin('RT::Extension::MergeUsers');
+
+For RT 4.0, add this line:
+
     Set(@Plugins, qw(RT::Extension::MergeUsers));
 
-    If you have more than one Plugin enabled, you must enable them as one
-    Set(@Plugins, qw(Foo Bar)); command
+or add C<RT::Extension::MergeUsers> to your existing C<@Plugins> line.
+
+=item Clear your mason cache
+
+    rm -rf /opt/rt4/var/mason_data/obj
+
+=item Restart your webserver
+
+=back
 
 =head1 UPGRADING
 
-If you are upgrading from 0.03_01 or earlier, you must run F<rt-upgrade-merged-users>.
-This script will create MergedUsers Attributes so RT can know when you're looking
-at a user that other users have been merged into. If you don't run this script,
-you'll have issues unmerging users. It can be safely run multiple times, it will
-only create Attributes as needed.
+If you are upgrading from 0.03_01 or earlier, you must run
+F<rt-upgrade-merged-users>.  This script will create MergedUsers
+Attributes so RT can know when you're looking at a user that other users
+have been merged into. If you don't run this script, you'll have issues
+unmerging users. It can be safely run multiple times, it will only
+create Attributes as needed.
 
 =head1 UTILITIES
 
