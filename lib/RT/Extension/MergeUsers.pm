@@ -140,7 +140,7 @@ or add C<RT::Extension::MergeUsers> to your existing C<@Plugins> line.
 =head1 UPGRADING
 
 If you are upgrading from 0.03_01 or earlier, you must run
-F<rt-upgrade-merged-users>.  This script will create MergedUsers
+F<bin/rt-update-merged-users>.  This script will create MergedUsers
 Attributes so RT can know when you're looking at a user that other users
 have been merged into. If you don't run this script, you'll have issues
 unmerging users. It can be safely run multiple times, it will only
