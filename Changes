@@ -1,3 +1,7 @@
+1.01 2014-12-01
+ - Fix name of upgrade script in documentation
+ - Update Module::Install and Module::Install::RTx
+
 1.00 2014-06-20
  - Better compatibility with shredder -- tool to repair badly shredded
    merged users, and adjustments to make shredder un-merge before
