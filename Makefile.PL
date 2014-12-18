@@ -1,10 +1,8 @@
 use inc::Module::Install;
 
 RTx 'RT-Extension-MergeUsers';
-readme_from 'lib/RT/Extension/MergeUsers.pm';
 
-requires_rt('4.0.0');
-rt_too_new('4.4.0');
+repository('https://github.com/bestpractical/rt-extension-mergeusers');
 
 my ($lib_path) = $INC{'RT.pm'} =~ /^(.*)[\\\/]/;
 my $local_lib_path = "$RT::LocalPath/lib";

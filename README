@@ -18,9 +18,9 @@ DESCRIPTION
 INSTALLATION
     Be sure to also read "UPGRADING" if you are upgrading.
 
-    "perl Makefile.PL"
-    "make"
-    "make install"
+    perl Makefile.PL
+    make
+    make install
         May need root permissions
 
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
@@ -32,7 +32,7 @@ INSTALLATION
 
             Set(@Plugins, qw(RT::Extension::MergeUsers));
 
-        or add "RT::Extension::MergeUsers" to your existing @Plugins line.
+        or add RT::Extension::MergeUsers to your existing @Plugins line.
 
     Clear your mason cache
             rm -rf /opt/rt4/var/mason_data/obj
