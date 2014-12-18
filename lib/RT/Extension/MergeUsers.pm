@@ -157,6 +157,10 @@ to the now missing user id. This script cleans up attributes
 if the merged-into user record is now gone. These users will then be
 converted back to regular unmerged users.
 
+=head2 rt-merge-users
+
+A command-line tool to merge one user into another
+
 =cut
 
 package RT::User;
