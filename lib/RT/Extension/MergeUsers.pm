@@ -401,12 +401,6 @@ sub NameAndEmail {
 package RT::Users;
 use RT::Users;
 
-=head2 Next
-
-This custom iterator makes sure that duplicate users are never shown in search results.
-
-=cut
-
 sub Next {
     my $self = shift;
 

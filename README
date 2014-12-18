@@ -77,9 +77,6 @@ UTILITIES
     cleans up attributes if the merged-into user record is now gone. These
     users will then be converted back to regular unmerged users.
 
-  Next
-    This custom iterator makes sure that duplicate users are never shown in
-    search results.
 
 AUTHOR
     Alex Vandiver <alexmv@bestpractical.com>
