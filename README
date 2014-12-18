@@ -15,28 +15,6 @@ DESCRIPTION
     all e-mail sent from secondary users is displayed as coming from the
     primary user.
 
-  RT::Shredder and Merged Users
-    Merging a user effectively makes it impossible to load the merged user
-    directly. Attempting to access the old user resolves to the merged-into
-    user. Because of this, MergeUsers has some extra code to help
-    RT::Shredder clean up these merged records to avoid leaving merged user
-    records in the DB while removing the user they were merged into.
-
-    When running RT::Shredder on a user record with other users merged into
-    it, the merged users are Unmerged before the initial user record is
-    shredded. There are two options to handle these newly unmerged users:
-
-    1.  Re-run your shredder command with the same or similar options. The
-        unmerged user records will now be accessible and, depending on your
-        shredder options, they will likely be shredded on the second run. If
-        you have multiple layers of merged users, you may need to run
-        shredder multiple times.
-
-    2.  MergeUsers will log the unmerged users at the "info" level so you
-        can pull the user ids from the log and shred them manually. This is
-        most likely to be useful if you are shredding one specific user (and
-        all merged accounts).
-
 INSTALLATION
     Be sure to also read "UPGRADING" if you are upgrading.
 
@@ -80,6 +58,28 @@ UTILITIES
   rt-merge-users
     A command-line tool to merge one user into another
 
+CAVEATS
+  RT::Shredder and Merged Users
+    Merging a user effectively makes it impossible to load the merged user
+    directly. Attempting to access the old user resolves to the merged-into
+    user. Because of this, MergeUsers has some extra code to help
+    RT::Shredder clean up these merged records to avoid leaving merged user
+    records in the DB while removing the user they were merged into.
+
+    When running RT::Shredder on a user record with other users merged into
+    it, the merged users are Unmerged before the initial user record is
+    shredded. There are two options to handle these newly unmerged users:
+
+    1.  Re-run your shredder command with the same or similar options. The
+        unmerged user records will now be accessible and, depending on your
+        shredder options, they will likely be shredded on the second run. If
+        you have multiple layers of merged users, you may need to run
+        shredder multiple times.
+
+    2.  MergeUsers will log the unmerged users at the info level so you can
+        pull the user ids from the log and shred them manually. This is most
+        likely to be useful if you are shredding one specific user (and all
+        merged accounts).
 
 AUTHOR
     Alex Vandiver <alexmv@bestpractical.com>
