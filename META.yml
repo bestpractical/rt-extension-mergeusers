@@ -1,7 +1,7 @@
 ---
 abstract: 'Merges two users into the same effective user'
 author:
-  - 'Alex Vandiver <alexmv@bestpractical.com>'
+  - 'Best Practical Solutions, LLC <modules@bestpractical.com>'
 build_requires:
   ExtUtils::MakeMaker: 6.59
 configure_requires:
