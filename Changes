@@ -1,3 +1,6 @@
+1.02_01 2015-01-30
+ - Compatibility with Assets on UserAssets portlet
+
 1.01 2014-12-01
  - Fix name of upgrade script in documentation
  - Update Module::Install and Module::Install::RTx
