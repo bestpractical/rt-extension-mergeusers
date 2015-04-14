@@ -195,7 +195,7 @@ sub CanonicalizeEmailAddress {
     my $canonical_user = RT::User->new( $RT::SystemUser );
     $canonical_user->LoadByCols( EmailAddress => $address );
     return $address unless $canonical_user->id;
-    return $address unless $canonical_user->EmailAddress ne $address;
+    return $address unless $canonical_user->EmailAddress && $canonical_user->EmailAddress ne $address;
     return $canonical_user->CanonicalizeEmailAddress(
         $canonical_user->EmailAddress
     );
