@@ -9,3 +9,4 @@ pm_to_blib
 /bin/rt-update-merged-users
 /bin/rt-clean-merged-users
 /xt/tmp
+/lib/RT/Extension/MergeUsers/Test.pm

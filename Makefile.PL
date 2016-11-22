@@ -23,6 +23,7 @@ substitute( {
     'bin/rt-update-merged-users',
     'bin/rt-merge-users',
     'bin/rt-clean-merged-users',
+    'lib/RT/Extension/MergeUsers/Test.pm',
 );
 
 no_index( package => 'RT::User', 'RT::Users', 'RT::Principal');

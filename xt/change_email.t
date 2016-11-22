@@ -2,9 +2,7 @@
 
 use strict;
 use warnings;
-use RT::Test
-    tests   => 'no_declare',
-    testing => 'RT::Extension::MergeUsers';
+use RT::Extension::MergeUsers::Test tests => undef;
 
 my ($id, $message);
 

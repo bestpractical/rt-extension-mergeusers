@@ -1,9 +1,8 @@
-#!/sw/bin/perl5.8.6
+#!/usr/bin/perl
 
 use strict;
-use RT::Test
-    tests   => 'no_declare',
-    testing => 'RT::Extension::MergeUsers';
+use warnings;
+use RT::Extension::MergeUsers::Test tests => undef;
 
 my ($id, $message);
 
