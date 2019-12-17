@@ -411,36 +411,29 @@ sub NameAndEmail {
 package RT::Users;
 use RT::Users;
 
-sub Next {
-    my $self = shift;
-
-    my $user = $self->SUPER::Next(@_);
-    unless ($user and $user->id) {
-        $self->{seen_users} = undef;
-        return undef;
+sub AddRecord {
+    my $self   = shift;
+    my $record = shift;
+    if ( $record->id ) {
+        my ($effective_id) = $record->Attributes->Named("EffectiveId");
+        my $original_id = $record->Id;
+        if ( $effective_id && $effective_id->Content && $effective_id->Content != $record->id ) {
+            my $user = RT::User->new( $record->CurrentUser );
+            $user->LoadByCols( id => $effective_id->Content );
+            if ( $user->id ) {
+                return if $self->{seen_users}{ $user->id };
+                $record = $user;
+            }
+        }
     }
-
-
-
-    my ($effective_id) = $user->Attributes->Named("EffectiveId");
-    my $original_id = $user->Id;
-    if ($effective_id && $effective_id->Content && $effective_id->Content != $user->id) {
-        $user->LoadByCols(id =>$effective_id->Content);
-    }
-    return $self->Next() if ($user->Id and $self->{seen_users}->{$user->id}++);
-
-    # Failed to load the effective user record for some reason, so expose
-    # this user again.
-    $user->LoadByCols( Id => $original_id )
-        unless $user->Id;
-
-    return $user;
+    $self->{seen_users}{ $record->id }++;
+    return $self->SUPER::AddRecord($record);
 }
 
-sub GotoFirstItem {
+sub _DoSearch {
     my $self = shift;
-    $self->{seen_users} = undef;
-    $self->GotoItem(0);
+    delete $self->{seen_users};
+    return $self->SUPER::_DoSearch(@_);
 }
 
 
