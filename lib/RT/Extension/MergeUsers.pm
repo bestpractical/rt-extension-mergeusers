@@ -496,6 +496,91 @@ sub SetDisabled {
         }
         return $orig_delete_member->( $self, $member_id, @_ );
     };
+
+}
+
+{
+    package RT::Groups;
+    sub WithMember {
+        my $self = shift;
+        my %args = ( PrincipalId => undef,
+                     Recursively => undef,
+                     @_);
+        my $members = $self->Join(
+            ALIAS1 => 'main', FIELD1 => 'id',
+            $args{'Recursively'}
+                ? (TABLE2 => 'CachedGroupMembers')
+                # (GroupId, MemberId) is unique in GM table
+                : (TABLE2 => 'GroupMembers', DISTINCT => 1)
+            ,
+            FIELD2 => 'GroupId',
+        );
+
+        my $principal = RT::Principal->new( $self->CurrentUser );
+        $principal->Load($args{'PrincipalId'});
+        my @ids = $args{'PrincipalId'};
+        if ( $principal->IsUser ) {
+
+            # Not call GetMergedUsers as we don't want to create the attribute here
+            my $merged_users = $principal->Object->FirstAttribute('MergedUsers');
+            push @ids, @{ $merged_users->Content } if $merged_users;
+        }
+
+        $self->Limit(ALIAS => $members, FIELD => 'MemberId', OPERATOR => 'IN', VALUE => \@ids);
+        $self->Limit(ALIAS => $members, FIELD => 'Disabled', VALUE => 0)
+            if $args{'Recursively'};
+
+        return $members;
+    }
+
+    sub WithoutMember {
+        my $self = shift;
+        my %args = (
+            PrincipalId => undef,
+            Recursively => undef,
+            @_
+        );
+
+        my $members = $args{'Recursively'} ? 'CachedGroupMembers' : 'GroupMembers';
+        my $members_alias = $self->Join(
+            TYPE   => 'LEFT',
+            FIELD1 => 'id',
+            TABLE2 => $members,
+            FIELD2 => 'GroupId',
+            DISTINCT => $members eq 'GroupMembers',
+        );
+
+        my $principal = RT::Principal->new( $self->CurrentUser );
+        $principal->Load($args{'PrincipalId'});
+        my @ids = $args{'PrincipalId'};
+        if ( $principal->IsUser ) {
+
+            # Not call GetMergedUsers as we don't want to create the attribute here
+            my $merged_users = $principal->Object->FirstAttribute('MergedUsers');
+            push @ids, @{ $merged_users->Content } if $merged_users;
+        }
+        $self->Limit(
+            LEFTJOIN => $members_alias,
+            ALIAS    => $members_alias,
+            FIELD    => 'MemberId',
+            OPERATOR => 'IN',
+            VALUE    => \@ids,
+        );
+
+        $self->Limit(
+            LEFTJOIN => $members_alias,
+            ALIAS    => $members_alias,
+            FIELD    => 'Disabled',
+            VALUE    => 0
+        ) if $args{'Recursively'};
+        $self->Limit(
+            ALIAS    => $members_alias,
+            FIELD    => 'MemberId',
+            OPERATOR => 'IS',
+            VALUE    => 'NULL',
+            QUOTEVALUE => 0,
+        );
+    }
 }
 
 =head1 AUTHOR
