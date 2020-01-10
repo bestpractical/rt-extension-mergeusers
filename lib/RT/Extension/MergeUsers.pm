@@ -457,6 +457,47 @@ sub SetDisabled {
     return ($ret, $msg);
 }
 
+{
+    package RT::Group;
+    my $orig_delete_member = \&RT::Group::DeleteMember;
+    *DeleteMember = sub {
+        my $self      = shift;
+        my $member_id = shift;
+
+        my $principal = RT::Principal->new( $self->CurrentUser );
+        $principal->Load($member_id);
+        if ( $principal->IsUser ) {
+
+            # Not call GetMergedUsers as we don't want to create the attribute here
+            my $merged_users = $principal->Object->FirstAttribute('MergedUsers');
+            if ( $merged_users && @{ $merged_users->Content } ) {
+                my $members = $self->MembersObj;
+                $members->Limit(
+                    FIELD    => 'MemberId',
+                    VALUE    => [ $member_id, @{ $merged_users->Content } ],
+                    OPERATOR => 'IN',
+                );
+
+                if ( $members->Count ) {
+                    my ( $ret, $msg );
+                    $RT::Handle->BeginTransaction;
+                    while ( my $member = $members->Next ) {
+                        ( $ret, $msg ) = $orig_delete_member->( $self, $member->MemberId, @_ );
+                        if ( !$ret ) {
+                            $RT::Handle->Rollback;
+                            return ( $ret, $msg );
+                        }
+                    }
+                    $RT::Handle->Commit;
+                    return ( $ret, $msg );
+
+                }
+            }
+        }
+        return $orig_delete_member->( $self, $member_id, @_ );
+    };
+}
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
