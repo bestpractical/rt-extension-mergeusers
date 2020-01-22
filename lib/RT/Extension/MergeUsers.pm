@@ -583,6 +583,78 @@ sub SetDisabled {
     }
 }
 
+# Partially copied from RT::SearchBuilder::Role::Roles::RoleLimit.  It's to
+# expand user id with all merged users ids. Patching
+# RT::SearchBuilder::Role::Roles::RoleLimit directly won't work because the
+# method is exported to RT::Tickets and RT::Assets quite early before this
+# plugin is imported.
+
+sub TweakRoleLimitArgs {
+    my $self = shift;
+    my %args = (
+        TYPE     => '',
+        CLASS    => '',
+        FIELD    => undef,
+        OPERATOR => '=',
+        VALUE    => undef,
+        @_
+    );
+
+    my $class = $args{CLASS} || $self->_RoleGroupClass;
+
+    $args{FIELD} ||= 'id' if $args{VALUE} =~ /^\d+$/;
+
+    my $type = $args{TYPE};
+    if ( $type and not $class->HasRole($type) ) {
+        RT->Logger->warn("RoleLimit called with invalid role $type for $class");
+        return %args;
+    }
+
+    my $column = $type ? $class->Role($type)->{Column} : undef;
+
+    # if it's equality op and search by Email or Name then we can preload user
+    # we do it to help some DBs better estimate number of rows and get better plans
+    if ( $args{OPERATOR} =~ /^(!?)=$/
+        && ( !$args{FIELD} || $args{FIELD} eq 'id' || $args{FIELD} eq 'Name' || $args{FIELD} eq 'EmailAddress' ) )
+    {
+        my $is_negative = $1;
+        my $o           = RT::User->new( $self->CurrentUser );
+        my $method
+            = !$args{FIELD} ? ( $column ? 'Load' : 'LoadByEmail' )
+            : $args{FIELD} eq 'EmailAddress' ? 'LoadByEmail'
+            :                                  'Load';
+        $o->$method( $args{VALUE} );
+        $args{FIELD} = 'id';
+        if ( $o->id ) {
+            if ( my $merged_users = $o->FirstAttribute('MergedUsers') ) {
+                $args{VALUE} = [ $o->id, @{ $merged_users->Content } ];
+                $args{OPERATOR} = $is_negative ? 'NOT IN' : 'IN';
+            }
+            else {
+                $args{VALUE} = $o->id;
+            }
+        }
+        else {
+            $args{VALUE} = 0;
+        }
+    }
+    return %args;
+}
+
+{
+    my $original_role_limit = \&RT::Tickets::RoleLimit;
+    *RT::Tickets::RoleLimit = sub {
+        return $original_role_limit->( $_[0], TweakRoleLimitArgs(@_) );
+    };
+}
+
+{
+    my $original_role_limit = \&RT::Assets::RoleLimit;
+    *RT::Assets::RoleLimit = sub {
+        return $original_role_limit->( $_[0], TweakRoleLimitArgs(@_) );
+    };
+}
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
