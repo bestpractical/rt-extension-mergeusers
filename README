@@ -2,6 +2,9 @@ NAME
     RT::Extension::MergeUsers - Merges two users into the same effective
     user
 
+RT VERSION
+    Works with RT 4.0, 4.2 and 4.4.
+
 DESCRIPTION
     This RT extension adds a "Merge Users" box to the User Administration
     page, which allows you to merge the user you are currently viewing with
