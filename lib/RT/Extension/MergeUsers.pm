@@ -421,12 +421,11 @@ sub AddRecord {
             my $user = RT::User->new( $record->CurrentUser );
             $user->LoadByCols( id => $effective_id->Content );
             if ( $user->id ) {
-                return if $self->{seen_users}{ $user->id };
                 $record = $user;
             }
         }
     }
-    $self->{seen_users}{ $record->id }++;
+    return if $self->{seen_users}{ $record->id }++;
     return $self->SUPER::AddRecord($record);
 }
 
