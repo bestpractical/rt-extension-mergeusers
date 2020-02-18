@@ -456,6 +456,28 @@ sub SetDisabled {
     return ($ret, $msg);
 }
 
+my $orig_has_right = \&RT::Principal::HasRight;
+*HasRight = sub {
+    my $self = shift;
+    my $ret = $orig_has_right->( $self, @_ );
+    return $ret if $ret || $self->IsGroup;
+
+    if ( my $merged_users = $self->Object->FirstAttribute('MergedUsers') ) {
+        for my $id ( @{ $merged_users->Content || [] } ) {
+            my $principal = RT::Principal->new( $self->CurrentUser );
+            $principal->Load($id);
+            if ( $principal->Id ) {
+                my $ret = $orig_has_right->( $principal, @_ );
+                return $ret if $ret;
+            }
+            else {
+                RT->Logger->warning("Couldn't load principal #$id");
+            }
+        }
+    }
+    return 0;
+};
+
 {
     package RT::Group;
     my $orig_delete_member = \&RT::Group::DeleteMember;
