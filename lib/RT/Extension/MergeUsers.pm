@@ -655,9 +655,6 @@ sub TweakRoleLimitArgs {
                 $args{VALUE} = $o->id;
             }
         }
-        else {
-            $args{VALUE} = 0;
-        }
     }
     return %args;
 }
