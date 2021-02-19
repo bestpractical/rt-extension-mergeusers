@@ -265,34 +265,34 @@ sub MergeInto {
     # Load the user objects we were called with
     my $merge;
     if (ref $user) {
-        return (0, "User is not loaded") unless $user->id;
+        return (0, $self->loc("User is not loaded")) unless $user->id;
 
         $merge = RT::User->new( $self->CurrentUser );
         $merge->Load($user->id);
-        return (0, "Could not reload user #". $user->id)
+        return (0, $self->loc("Could not reload user #[_1]", $user->id))
             unless $merge->id;
     } else {
         $merge = RT::User->new( $self->CurrentUser );
         $merge->Load($user);
-        return (0, "Could not load user '$user'") unless $merge->id;
+        return (0, $self->loc("Could not load user '[_1]'", $user)) unless $merge->id;
     }
-    return (0, "Could not load user to be merged") unless $merge->id;
+    return (0, $self->loc("Could not load user to be merged")) unless $merge->id;
 
     # Get copies of the canonicalized users
     my $email;
 
     my $canonical_self = RT::User->new( $self->CurrentUser );
     $canonical_self->Load($self->id);
-    return (0, "Could not load user to merge into") unless $canonical_self->id;
+    return (0, $self->loc("Could not load user to merge into")) unless $canonical_self->id;
 
     # No merging into yourself!
-    return (0, "Could not merge @{[$merge->Name]} into itself")
+    return (0, $self->loc("Could not merge [_1] into itself", "@{[$merge->Name]}"))
            if $merge->id == $canonical_self->id;
 
     # No merging if the user you're merging into was merged into you
     # (ie. you're the primary address for this user)
     my ($new) = $merge->Attributes->Named("EffectiveId");
-    return (0, "User @{[$canonical_self->Name]} has already been merged")
+    return (0, $self->loc("User [_1] has already been merged", "@{[$canonical_self->Name]}"))
            if defined $new and $new->Content == $canonical_self->id;
 
     # clean the cache
@@ -317,14 +317,14 @@ sub MergeInto {
         $canonical_self->Comments||'',
         "Merged into ". ($merge->EmailAddress || $merge->Name)." (". $merge->id .")",
     );
-    return (1, "Merged users successfuly");
+    return (1, $self->loc("Merged users successfuly"));
 }
 
 sub UnMerge {
     my $self = shift;
 
     my ($current) = $self->Attributes->Named("EffectiveId");
-    return (0, "Not a merged user") unless $current;
+    return (0, $self->loc("Not a merged user")) unless $current;
 
     # flush the cache, or the Sets below will
     # clobber $self
@@ -352,7 +352,7 @@ sub UnMerge {
         $merged_users->Delete;
     }
 
-    return ($merge->id, "Unmerged @{[$self->NameAndEmail]} from @{[$merge->NameAndEmail]}");
+    return ($merge->id, $self->loc("Unmerged [_1] from [_2]", "@{[$self->NameAndEmail]}", "@{[$merge->NameAndEmail]}"));
 }
 
 sub SetEmailAddress {
