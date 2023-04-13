@@ -429,10 +429,26 @@ sub AddRecord {
     return $self->SUPER::AddRecord($record);
 }
 
-sub _DoSearch {
-    my $self = shift;
-    delete $self->{seen_users};
-    return $self->SUPER::_DoSearch(@_);
+# DBIx::SearchBuilder 1.72 adds a new feature called CombineSearchAndCount,
+# when it's enabled _DoSearchAndCount will be called instead of _DoSearch. As
+# both methods call __DoSearch underneath, we can clear seen_users there
+# instead. In older versions, _we have only _DoSearch, so we need to clear
+# seen_users there for compatibility purposes.
+
+if ( DBIx::SearchBuilder->can('__DoSearch') ) {
+    no warnings 'redefine';
+    *__DoSearch = sub {
+        my $self = shift;
+        delete $self->{seen_users};
+        return $self->SUPER::__DoSearch(@_);
+    };
+} else {
+    no warnings 'redefine';
+    *_DoSearch = sub {
+        my $self = shift;
+        delete $self->{seen_users};
+        return $self->SUPER::_DoSearch(@_);
+    };
 }
 
 
