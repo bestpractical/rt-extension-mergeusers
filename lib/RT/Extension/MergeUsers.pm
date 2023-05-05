@@ -691,6 +691,29 @@ sub TweakRoleLimitArgs {
     };
 }
 
+{
+    package RT::ACL;
+    no warnings 'redefine';
+
+    my $orig_limit = RT::ACL->can('Limit');
+    *Limit = sub {
+        my $self = shift;
+        my %args = @_;
+        if (   $args{FIELD} eq 'MemberId'
+            && ( $args{OPERATOR} || '=' ) =~ /^!?=$/
+            && $args{VALUE} =~ /^(\d+)$/ )
+        {
+            my @ids = RT::Principal->Ids($1);
+            if ( @ids > 1 ) {
+                $args{OPERATOR} = ( $args{OPERATOR} || '=' ) eq '=' ? 'IN' : 'NOT IN';
+                $args{VALUE}    = \@ids;
+            }
+        }
+        return $orig_limit->( $self, %args );
+    };
+}
+
+
 =head1 AUTHOR
 
 Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
