@@ -713,6 +713,27 @@ sub TweakRoleLimitArgs {
     };
 }
 
+{
+    package RT::Tickets;
+    no warnings 'redefine';
+
+    my $orig_limit = RT::Tickets->can('Limit');
+    *Limit = sub {
+        my $self = shift;
+        my %args = @_;
+        if (   $args{FIELD} eq 'Owner'
+            && ( $args{OPERATOR} || '=' ) =~ /^!?=$/
+            && $args{VALUE} =~ /^(\d+)$/ )
+        {
+            my @ids = RT::Principal->Ids($1);
+            if ( @ids > 1 ) {
+                $args{OPERATOR} = ( $args{OPERATOR} || '=' ) eq '=' ? 'IN' : 'NOT IN';
+                $args{VALUE}    = \@ids;
+            }
+        }
+        return $orig_limit->( $self, %args );
+    };
+}
 
 =head1 AUTHOR
 
