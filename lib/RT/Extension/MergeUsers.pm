@@ -494,6 +494,23 @@ my $orig_has_right = \&RT::Principal::HasRight;
     return 0;
 };
 
+sub Ids {
+    my $self = shift;
+    my $id   = shift;
+    my @ids  = $id;
+
+    my $principal = RT::Principal->new( RT->SystemUser );
+    $principal->Load($id);
+
+    if ( $principal->IsUser ) {
+
+        # Not call GetMergedUsers as we don't want to create the attribute here
+        my $merged_users = $principal->Object->FirstAttribute('MergedUsers');
+        push @ids, @{ $merged_users->Content } if $merged_users;
+    }
+    return @ids;
+}
+
 {
     package RT::Group;
     my $orig_delete_member = \&RT::Group::DeleteMember;
@@ -553,16 +570,8 @@ my $orig_has_right = \&RT::Principal::HasRight;
             FIELD2 => 'GroupId',
         );
 
-        my $principal = RT::Principal->new( $self->CurrentUser );
-        $principal->Load($args{'PrincipalId'});
-        my @ids = $args{'PrincipalId'};
-        if ( $principal->IsUser ) {
 
-            # Not call GetMergedUsers as we don't want to create the attribute here
-            my $merged_users = $principal->Object->FirstAttribute('MergedUsers');
-            push @ids, @{ $merged_users->Content } if $merged_users;
-        }
-
+        my @ids = RT::Principal->Ids( $args{'PrincipalId'} );
         $self->Limit(ALIAS => $members, FIELD => 'MemberId', OPERATOR => 'IN', VALUE => \@ids);
         $self->Limit(ALIAS => $members, FIELD => 'Disabled', VALUE => 0)
             if $args{'Recursively'};
@@ -587,15 +596,8 @@ my $orig_has_right = \&RT::Principal::HasRight;
             DISTINCT => $members eq 'GroupMembers',
         );
 
-        my $principal = RT::Principal->new( $self->CurrentUser );
-        $principal->Load($args{'PrincipalId'});
-        my @ids = $args{'PrincipalId'};
-        if ( $principal->IsUser ) {
+        my @ids = RT::Principal->Ids( $args{'PrincipalId'} );
 
-            # Not call GetMergedUsers as we don't want to create the attribute here
-            my $merged_users = $principal->Object->FirstAttribute('MergedUsers');
-            push @ids, @{ $merged_users->Content } if $merged_users;
-        }
         $self->Limit(
             LEFTJOIN => $members_alias,
             ALIAS    => $members_alias,
