@@ -195,6 +195,9 @@ sub CanonicalizeEmailAddress {
         $address =~ s/$RT::CanonicalizeEmailAddressMatch/$RT::CanonicalizeEmailAddressReplace/gi;
     }
 
+    # Empty emails should not be used to find users
+    return $address unless defined $address && length $address;
+
     # get the user whose email address this is
     my $canonical_user = RT::User->new( $RT::SystemUser );
     $canonical_user->LoadByCols( EmailAddress => $address );
