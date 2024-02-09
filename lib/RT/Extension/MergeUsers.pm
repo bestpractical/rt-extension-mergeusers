@@ -724,7 +724,7 @@ sub TweakRoleLimitArgs {
     *Limit = sub {
         my $self = shift;
         my %args = @_;
-        if (   $args{FIELD} eq 'Owner'
+        if (   ( $args{FIELD} // '' ) eq 'Owner'
             && ( $args{OPERATOR} || '=' ) =~ /^!?=$/
             && $args{VALUE} =~ /^(\d+)$/ )
         {
