@@ -666,8 +666,8 @@ sub TweakRoleLimitArgs {
             : $args{FIELD} eq 'EmailAddress' ? 'LoadByEmail'
             :                                  'Load';
         $o->$method( $args{VALUE} );
-        $args{FIELD} = 'id';
         if ( $o->id ) {
+            $args{FIELD} = 'id';
             if ( my $merged_users = $o->FirstAttribute('MergedUsers') ) {
                 $args{VALUE} = [ $o->id, @{ $merged_users->Content } ];
                 $args{OPERATOR} = $is_negative ? 'NOT IN' : 'IN';
