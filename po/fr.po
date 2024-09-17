@@ -1,0 +1,78 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2021-02-19 10:37+0000\n"
+"PO-Revision-Date: 2021-02-19 10:40+0000\n"
+"Last-Translator: Emmanuel Lacour <elacour@home-dn.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. ($user)
+#: lib/RT/Extension/MergeUsers.pm:277
+msgid "Could not load user '%1'"
+msgstr "Impossible de charger l’utilisateur « %1 »"
+
+#: lib/RT/Extension/MergeUsers.pm:279
+msgid "Could not load user to be merged"
+msgstr "Impossible de charger l’utilisateur à fusionner"
+
+#: lib/RT/Extension/MergeUsers.pm:286
+msgid "Could not load user to merge into"
+msgstr "Impossible de charger l’utilisateur vers lequel fusionner"
+
+#. (@{[$merge->Name]})
+#: lib/RT/Extension/MergeUsers.pm:289
+msgid "Could not merge %1 into itself"
+msgstr "Impossible de fusionner %1 avec lui même"
+
+#. ($user->id)
+#: lib/RT/Extension/MergeUsers.pm:272
+msgid "Could not reload user #%1"
+msgstr "Impossible de re-charger l’utilisateur n°%1"
+
+#: lib/RT/Extension/MergeUsers.pm:363
+msgid "Email address in use"
+msgstr "Adresse de courriel utilisée"
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:117 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:92
+msgid "Merge this user into"
+msgstr "Fusionner cet utilisateur dans"
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:49
+msgid "Merge user"
+msgstr "Fusionner l’utilisateur"
+
+#: lib/RT/Extension/MergeUsers.pm:320
+msgid "Merged users successfuly"
+msgstr "Utilisateurs fusionnés"
+
+#: lib/RT/Extension/MergeUsers.pm:327
+msgid "Not a merged user"
+msgstr "Utilisateur non fusionné"
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:110 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:74
+msgid "The following users have been merged into this user"
+msgstr "Les utilisateurs suivants ont été fusionnés dans celui-ci"
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:105 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:62
+msgid "This user has been merged with"
+msgstr "Cet utilisateur a été fusionné avec"
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:108 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:114 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:68 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:85
+msgid "Unmerge"
+msgstr "Annuler"
+
+#. (@{[$self->NameAndEmail]}, @{[$merge->NameAndEmail]})
+#: lib/RT/Extension/MergeUsers.pm:355
+msgid "Unmerged %1 from %2"
+msgstr "Fusion de %1 avec %2 annulée"
+
+#. (@{[$canonical_self->Name]})
+#: lib/RT/Extension/MergeUsers.pm:295
+msgid "User %1 has already been merged"
+msgstr "L’utilisateur %1 est déjà fusionné"
+
+#: lib/RT/Extension/MergeUsers.pm:268
+msgid "User is not loaded"
+msgstr "Utilisateur non chargé"
+
