@@ -167,6 +167,11 @@ be useful if you are shredding one specific user (and all merged accounts).
 
 =back
 
+=head2 rt-serializer
+
+MergeUsers is not compatible with C<rt-seralizer>, you need to disable the
+extension before running C<rt-serializer>.
+
 =cut
 
 package RT::User;
