@@ -1,0 +1,69 @@
+#. ($user)
+#: lib/RT/Extension/MergeUsers.pm:277
+msgid "Could not load user '%1'"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:279
+msgid "Could not load user to be merged"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:286
+msgid "Could not load user to merge into"
+msgstr ""
+
+#. (@{[$merge->Name]})
+#: lib/RT/Extension/MergeUsers.pm:289
+msgid "Could not merge %1 into itself"
+msgstr ""
+
+#. ($user->id)
+#: lib/RT/Extension/MergeUsers.pm:272
+msgid "Could not reload user #%1"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:363
+msgid "Email address in use"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:117 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:92
+msgid "Merge this user into"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:49
+msgid "Merge user"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:320
+msgid "Merged users successfuly"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:327
+msgid "Not a merged user"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:110 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:74
+msgid "The following users have been merged into this user"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:105 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:62
+msgid "This user has been merged with"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:108 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:114 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:68 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:85
+msgid "Unmerge"
+msgstr ""
+
+#. (@{[$self->NameAndEmail]}, @{[$merge->NameAndEmail]})
+#: lib/RT/Extension/MergeUsers.pm:355
+msgid "Unmerged %1 from %2"
+msgstr ""
+
+#. (@{[$canonical_self->Name]})
+#: lib/RT/Extension/MergeUsers.pm:295
+msgid "User %1 has already been merged"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:268
+msgid "User is not loaded"
+msgstr ""
+
