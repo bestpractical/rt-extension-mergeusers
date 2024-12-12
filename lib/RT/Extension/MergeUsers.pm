@@ -479,6 +479,14 @@ sub MergeInto {
         return (0, "User @{[$canonical_self->Name]} has merged users");
     }
 
+    # If Privileged values for both users do not match, abort
+    my $merge_priv = $merge->Privileged // 0;
+    my $self_priv  = $self->Privileged // 0;
+    return ( 0,
+        "Cannot merge privileged users with unprivileged users, update the user's privileges first"
+        )
+        if $merge_priv != $self_priv;
+
     # clean the cache
     delete $EFFECTIVE_ID_CACHE{$self->id};
     RT::User->EffectiveIDCacheNeedsUpdate(1);
