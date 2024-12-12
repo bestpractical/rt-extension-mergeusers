@@ -298,6 +298,14 @@ sub MergeInto {
     return (0, "User @{[$canonical_self->Name]} has already been merged")
            if defined $new and $new->Content == $canonical_self->id;
 
+    # If Privileged values for both users do not match, abort
+    return ( 0,
+        "Cannot merge privileged users with unprivileged users, update the user's privileges first"
+        )
+        if ( !defined $merge->Privileged || !defined $self->Privileged )
+        || $merge->Privileged != $self->Privileged;
+
+
     # clean the cache
     delete $EFFECTIVE_ID_CACHE{$self->id};
 
