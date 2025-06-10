@@ -63,7 +63,7 @@ RT::Extension::MergeUsers - Merges two users into the same effective user
  
 =head1 RT VERSION
 
-Works with RT 4.0, 4.2, 4.4, 5.0.
+Works with RT 4.0, 4.2, 4.4, 5.0, 6.0.
 
 =head1 DESCRIPTION
 
@@ -92,7 +92,7 @@ Be sure to also read L</UPGRADING> if you are upgrading.
 
 May need root permissions
 
-=item Edit your F</opt/rt5/etc/RT_SiteConfig.pm>
+=item Edit your F</opt/rt6/etc/RT_SiteConfig.pm>
 
 If you are using RT 4.2 or greater, add this line:
 
@@ -106,7 +106,7 @@ or add C<RT::Extension::MergeUsers> to your existing C<@Plugins> line.
 
 =item Clear your mason cache
 
-    rm -rf /opt/rt5/var/mason_data/obj
+    rm -rf /opt/rt6/var/mason_data/obj
 
 =item Restart your webserver
 
@@ -820,7 +820,7 @@ or via the web at
 
 =head1 LICENSE AND COPYRIGHT
 
-This software is Copyright (c) 2014-2023 by Best Practical Solutions
+This software is Copyright (c) 2014-2025 by Best Practical Solutions
 
 This is free software, licensed under:
 
