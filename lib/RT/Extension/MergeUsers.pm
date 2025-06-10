@@ -55,12 +55,12 @@ use RT::Shredder;
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '1.10';
+our $VERSION = '1.11';
 
 =head1 NAME
 
 RT::Extension::MergeUsers - Merges two users into the same effective user
- 
+
 =head1 RT VERSION
 
 Works with RT 4.0, 4.2, 4.4, 5.0, 6.0.
