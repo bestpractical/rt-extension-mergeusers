@@ -55,7 +55,6 @@
   </div>
 
 % my ($EffectiveId) = $UserObj->Attributes->Named("EffectiveId");
-% my @MergedUsers = @{$UserObj->GetMergedUsers->Content};
 % if ($EffectiveId) {
 <div class="row">
   <div class="col-auto label">
@@ -100,7 +99,6 @@
 % else {
 <p class="error"><% $result||'' %></p>
 % my ($EffectiveId) = $UserObj->Attributes->Named("EffectiveId");
-% my @MergedUsers = @{$UserObj->GetMergedUsers->Content};
 % if ($EffectiveId) {
 This user has been merged with <a href="Modify.html?id=<% $EffectiveId->Content %>">
 % my $real = RT::User->new($session{'CurrentUser'});
@@ -135,6 +133,10 @@ foreach my $key (keys %ARGS) {
         ($id, $result) = $merged_user->UnMerge()
     }
 }
+
+# do not call GetMergedUsers as we don't want to create the attribute here
+my $merged_users = $UserObj->FirstAttribute('MergedUsers');
+my @MergedUsers  = @{ $merged_users ? $merged_users->Content : [] };
 </%init>
 <%args>
 $UserObj => undef
