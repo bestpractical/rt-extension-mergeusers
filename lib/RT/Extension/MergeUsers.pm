@@ -321,6 +321,16 @@ be useful if you are shredding one specific user (and all merged accounts).
 MergeUsers is not compatible with C<rt-seralizer>, you need to disable the
 extension before running C<rt-serializer>.
 
+=head2 Single level of merged users
+
+A user can only be merged into a single user.
+
+A user can have multiple users merged into themselves.
+
+A user that has one or more users merged into themselves cannot be merged into
+another user. You must first unmerge all the merged users and then merge them
+all into the other user.
+
 =cut
 
 package RT::User;
@@ -446,11 +456,22 @@ sub MergeInto {
     return (0, "Could not merge @{[$merge->Name]} into itself")
            if $merge->id == $canonical_self->id;
 
+    # No merging if the user being merged has already been merged
+    my ($self_effective) = $canonical_self->Attributes->Named("EffectiveId");
+    return (0, "User @{[$canonical_self->Name]} has already been merged into @{[$self_effective->Content]}")
+           if defined $self_effective and $self_effective->Content;
+
     # No merging if the user you're merging into was merged into you
     # (ie. you're the primary address for this user)
     my ($new) = $merge->Attributes->Named("EffectiveId");
     return (0, "User @{[$canonical_self->Name]} has already been merged")
            if defined $new and $new->Content == $canonical_self->id;
+
+    # do not allow merging a user that has its own merged user(s)
+    my $self_merged_users = $canonical_self->FirstAttribute('MergedUsers');
+    if ( $self_merged_users && @{ $self_merged_users->Content } ) {
+        return (0, "User @{[$canonical_self->Name]} has merged users");
+    }
 
     # clean the cache
     delete $EFFECTIVE_ID_CACHE{$self->id};
