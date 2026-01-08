@@ -337,19 +337,19 @@ package RT::User;
 
 our %EFFECTIVE_ID_CACHE;
 
-use RT::Interface::Web::Handler;
+sub EffectiveIDCacheNeedsUpdate {
+    my $self   = shift;
+    my $update = shift;
+    my $system = RT->System;
 
-{
-    my $i = 0;
-
-    my $old_cleanup = \&RT::Interface::Web::Handler::CleanupRequest;
-    no warnings 'redefine';
-    *RT::Interface::Web::Handler::CleanupRequest = sub {
-        $old_cleanup->(@_);
-        return if ++$i % 100; # flush cache every N requests
-        %EFFECTIVE_ID_CACHE = ();
-    };
+    if ($update) {
+        return $system->SetAttribute(Name => 'EffectiveIDCacheNeedsUpdate', Content => time);
+    } else {
+        my $cache = $system->FirstAttribute('EffectiveIDCacheNeedsUpdate');
+        return (defined $cache ? $cache->Content : 0 );
+    }
 }
+my $CACHE_TIME = RT::User->EffectiveIDCacheNeedsUpdate;
 
 sub CanonicalizeEmailAddress {
     my $self = shift;
@@ -376,6 +376,12 @@ sub LoadByCols {
     my $self = shift;
     $self->SUPER::LoadByCols(@_);
     return $self->id unless my $oid = $self->id;
+
+    my $cache_time = RT::User->EffectiveIDCacheNeedsUpdate;
+    if ( $CACHE_TIME < $cache_time ) {
+        %EFFECTIVE_ID_CACHE = ();
+        $CACHE_TIME         = $cache_time;
+    }
 
     unless ( exists $EFFECTIVE_ID_CACHE{ $oid } ) {
         my $effective_id = RT::Attribute->new( $RT::SystemUser );
@@ -475,6 +481,7 @@ sub MergeInto {
 
     # clean the cache
     delete $EFFECTIVE_ID_CACHE{$self->id};
+    RT::User->EffectiveIDCacheNeedsUpdate(1);
 
     # do the merge
     $canonical_self->SetAttribute(
@@ -507,6 +514,7 @@ sub UnMerge {
     # flush the cache, or the Sets below will
     # clobber $self
     delete $EFFECTIVE_ID_CACHE{$self->id};
+    RT::User->EffectiveIDCacheNeedsUpdate(1);
 
     my $merge = RT::User->new( $self->CurrentUser );
     $merge->Load( $current->Content );
