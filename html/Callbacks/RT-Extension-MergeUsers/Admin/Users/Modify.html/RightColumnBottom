@@ -92,6 +92,9 @@
 <%init>
 return unless $UserObj->id;
 
+# refresh attributes so they reflect changes from unmerge
+$UserObj->Attributes->RedoSearch;
+
 # do not call GetMergedUsers as we don't want to create the attribute here
 my $merged_users = $UserObj->FirstAttribute('MergedUsers');
 my @MergedUsers  = @{ $merged_users ? $merged_users->Content : [] };
