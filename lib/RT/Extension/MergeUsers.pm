@@ -512,7 +512,7 @@ sub MergeInto {
         $canonical_self->Comments||'',
         "Merged into ". ($merge->EmailAddress || $merge->Name)." (". $merge->id .")",
     );
-    return (1, "Merged users successfuly");
+    return ($merge->id, "Merged users successfuly");
 }
 
 sub UnMerge {
