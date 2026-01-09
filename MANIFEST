@@ -3,6 +3,7 @@ bin/rt-clean-merged-users.in
 bin/rt-merge-users.in
 bin/rt-update-merged-users.in
 Changes
+html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/BeforeUpdate
 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
