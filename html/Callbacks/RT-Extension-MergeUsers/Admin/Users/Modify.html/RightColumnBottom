@@ -47,12 +47,6 @@
 %# END BPS TAGGED BLOCK }}}
 <br />
 <&| /Widgets/TitleBox, title => loc('Merge user') &>
-  <div class="row">
-    <div class="col-12">
-      <p class="error"><% $result||'' %></p>
-    </div>
-  </div>
-
 % my ($EffectiveId) = $UserObj->Attributes->Named("EffectiveId");
 % if ($EffectiveId) {
 <div class="row">
@@ -98,27 +92,10 @@
 <%init>
 return unless $UserObj->id;
 
-my ($id, $result);
-if ($MergeUser) {
-    ($id, $result) = $UserObj->MergeInto($MergeUser);
-} elsif ($Unmerge) {
-    ($id, $result) = $UserObj->UnMerge();
-}
-
-foreach my $key (keys %ARGS) {
-    if ($key =~ /Unmerge(\d+)/) {
-        my $merged_user = RT::User->new($session{'CurrentUser'});
-        $merged_user->LoadOriginal( id => $1 );
-        ($id, $result) = $merged_user->UnMerge()
-    }
-}
-
 # do not call GetMergedUsers as we don't want to create the attribute here
 my $merged_users = $UserObj->FirstAttribute('MergedUsers');
 my @MergedUsers  = @{ $merged_users ? $merged_users->Content : [] };
 </%init>
 <%args>
 $UserObj => undef
-$MergeUser => undef
-$Unmerge => undef
 </%args>
