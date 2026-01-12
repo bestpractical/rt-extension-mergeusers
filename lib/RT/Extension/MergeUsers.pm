@@ -55,7 +55,7 @@ use RT::Shredder;
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '1.12';
+our $VERSION = '1.13';
 
 =head1 NAME
 
@@ -1008,7 +1008,7 @@ or via the web at
 
 =head1 LICENSE AND COPYRIGHT
 
-This software is Copyright (c) 2014-2025 by Best Practical Solutions
+This software is Copyright (c) 2014-2026 by Best Practical Solutions
 
 This is free software, licensed under:
 
