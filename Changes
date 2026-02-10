@@ -1,5 +1,8 @@
 Revision history for RT-Extension-MergeUsers
 
+1.14 2026-02-10
+ - Add French translation (Thanks Emmanuel Lacour)
+
 1.13 2026-01-12
  - Refresh attributes of user obj to pick up changes
  - Move merge logic into BeforeUpdate callback

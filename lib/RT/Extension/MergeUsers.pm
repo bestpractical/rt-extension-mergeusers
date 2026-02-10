@@ -55,7 +55,7 @@ use RT::Shredder;
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '1.13';
+our $VERSION = '1.14';
 
 =head1 NAME
 
