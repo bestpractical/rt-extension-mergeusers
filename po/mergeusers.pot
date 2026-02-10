@@ -1,0 +1,79 @@
+#: lib/RT/Extension/MergeUsers.pm:488
+msgid "Cannot merge privileged users with unprivileged users, update the user's privileges first"
+msgstr ""
+
+#. ($user)
+#: lib/RT/Extension/MergeUsers.pm:452
+msgid "Could not load user '%1'"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:454
+msgid "Could not load user to be merged"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:461
+msgid "Could not load user to merge into"
+msgstr ""
+
+#. (@{[$merge->Name]})
+#: lib/RT/Extension/MergeUsers.pm:464
+msgid "Could not merge %1 into itself"
+msgstr ""
+
+#. ($user->id)
+#: lib/RT/Extension/MergeUsers.pm:447
+msgid "Could not reload user #%1"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:559
+msgid "Email address in use"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:84
+msgid "Merge this user into:"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:49
+msgid "Merge user"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:515
+msgid "Merged users successfuly"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:66
+msgid "The following users have been merged into this user:"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:54
+msgid "This user has been merged with"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:60 html/Callbacks/RT-Extension-MergeUsers/Admin/Users/Modify.html/RightColumnBottom:77
+msgid "Unmerge"
+msgstr ""
+
+#. (@{[$self->NameAndEmail]}, @{[$merge->NameAndEmail]})
+#: lib/RT/Extension/MergeUsers.pm:551
+msgid "Unmerged %1 from %2"
+msgstr ""
+
+#. (@{[$canonical_self->Name]})
+#: lib/RT/Extension/MergeUsers.pm:475
+msgid "User %1 has already been merged"
+msgstr ""
+
+#. (@{[$canonical_self->Name]}, @{[$self_effective->Content]})
+#: lib/RT/Extension/MergeUsers.pm:469
+msgid "User %1 has already been merged into %2"
+msgstr ""
+
+#. (@{[$canonical_self->Name]})
+#: lib/RT/Extension/MergeUsers.pm:481
+msgid "User %1 has merged users"
+msgstr ""
+
+#: lib/RT/Extension/MergeUsers.pm:443
+msgid "User is not loaded"
+msgstr ""
+

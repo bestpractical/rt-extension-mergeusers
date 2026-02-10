@@ -51,19 +51,19 @@
 % if ($EffectiveId) {
 <div class="row">
   <div class="col-auto label">
-    This user has been merged with <a href="Modify.html?id=<% $EffectiveId->Content %>">
+    <&|/l&>This user has been merged with</&> <a href="Modify.html?id=<% $EffectiveId->Content %>">
 % my $real = RT::User->new($session{'CurrentUser'});
 % $real->Load($EffectiveId->Content);
 <% $real->NameAndEmail %></a>
   </div>
   <div class="col-auto">
-    <input class="form-control btn btn-primary" type="submit" name="Unmerge" value="Unmerge" />
+    <% $real->NameAndEmail %></a>; <input type="submit" name="Unmerge" value="<&|/l&>Unmerge</&>" />
   </div>
 </div>
 % } elsif (@MergedUsers) {
   <div class="row">
     <div class="label text-left">
-      The following users have been merged into this user:
+      <&|/l&>The following users have been merged into this user:</&>
     </div>
   </div>
 %   foreach my $user_id (@MergedUsers) {
@@ -74,14 +74,14 @@
     <% $user->NameAndEmail %>
   </div>
   <div class="col-4 value">
-    <input class="form-control btn btn-primary" type="submit" name="Unmerge<%$user_id%>" value="Unmerge">
+    <input class="form-control btn btn-primary" type="submit" name="Unmerge<%$user_id%>" value="<&|/l&>Unmerge</&>">
   </div>
 </div>
 %   }
 % } else {
 <div class="row">
   <div class="label col-auto text-left">
-    Merge this user into:
+    <&|/l&>Merge this user into:</&>
   </div>
   <div class="value col-auto">
     <input class="form-control" name="MergeUser" data-autocomplete="Users" data-autocomplete-return="Name" value="" />

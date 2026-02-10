@@ -55,7 +55,7 @@ use RT::Shredder;
 
 package RT::Extension::MergeUsers;
 
-our $VERSION = '1.13';
+our $VERSION = '1.14';
 
 =head1 NAME
 
@@ -440,52 +440,52 @@ sub MergeInto {
     # Load the user objects we were called with
     my $merge;
     if (ref $user) {
-        return (0, "User is not loaded") unless $user->id;
+        return (0, $self->loc("User is not loaded")) unless $user->id;
 
         $merge = RT::User->new( $self->CurrentUser );
         $merge->Load($user->id);
-        return (0, "Could not reload user #". $user->id)
+        return (0, $self->loc("Could not reload user #[_1]", $user->id))
             unless $merge->id;
     } else {
         $merge = RT::User->new( $self->CurrentUser );
         $merge->Load($user);
-        return (0, "Could not load user '$user'") unless $merge->id;
+        return (0, $self->loc("Could not load user '[_1]'", $user)) unless $merge->id;
     }
-    return (0, "Could not load user to be merged") unless $merge->id;
+    return (0, $self->loc("Could not load user to be merged")) unless $merge->id;
 
     # Get copies of the canonicalized users
     my $email;
 
     my $canonical_self = RT::User->new( $self->CurrentUser );
     $canonical_self->Load($self->id);
-    return (0, "Could not load user to merge into") unless $canonical_self->id;
+    return (0, $self->loc("Could not load user to merge into")) unless $canonical_self->id;
 
     # No merging into yourself!
-    return (0, "Could not merge @{[$merge->Name]} into itself")
+    return (0, $self->loc("Could not merge [_1] into itself", @{[$merge->Name]}))
            if $merge->id == $canonical_self->id;
 
     # No merging if the user being merged has already been merged
     my ($self_effective) = $canonical_self->Attributes->Named("EffectiveId");
-    return (0, "User @{[$canonical_self->Name]} has already been merged into @{[$self_effective->Content]}")
+    return (0, $self->loc("User [_1] has already been merged into [_2]", @{[$canonical_self->Name]}, @{[$self_effective->Content]}))
            if defined $self_effective and $self_effective->Content;
 
     # No merging if the user you're merging into was merged into you
     # (ie. you're the primary address for this user)
     my ($new) = $merge->Attributes->Named("EffectiveId");
-    return (0, "User @{[$canonical_self->Name]} has already been merged")
+    return (0, $self->loc("User [_1] has already been merged", @{[$canonical_self->Name]}))
            if defined $new and $new->Content == $canonical_self->id;
 
     # do not allow merging a user that has its own merged user(s)
     my $self_merged_users = $canonical_self->FirstAttribute('MergedUsers');
     if ( $self_merged_users && @{ $self_merged_users->Content } ) {
-        return (0, "User @{[$canonical_self->Name]} has merged users");
+        return (0, $self->loc("User [_1] has merged users", @{[$canonical_self->Name]}));
     }
 
     # If Privileged values for both users do not match, abort
     my $merge_priv = $merge->Privileged // 0;
     my $self_priv  = $self->Privileged // 0;
     return ( 0,
-        "Cannot merge privileged users with unprivileged users, update the user's privileges first"
+        $self->loc("Cannot merge privileged users with unprivileged users, update the user's privileges first")
         )
         if $merge_priv != $self_priv;
 
@@ -512,7 +512,7 @@ sub MergeInto {
         $canonical_self->Comments||'',
         "Merged into ". ($merge->EmailAddress || $merge->Name)." (". $merge->id .")",
     );
-    return ($merge->id, "Merged users successfuly");
+    return ($merge->id, $self->loc("Merged users successfuly"));
 }
 
 sub UnMerge {
@@ -548,7 +548,7 @@ sub UnMerge {
         $merged_users->Delete;
     }
 
-    return ($merge->id, "Unmerged @{[$self->NameAndEmail]} from @{[$merge->NameAndEmail]}");
+    return ( $merge->id, $self->loc( "Unmerged [_1] from [_2]", @{[$self->NameAndEmail]}, @{[$merge->NameAndEmail]} ) );
 }
 
 sub SetEmailAddress {
