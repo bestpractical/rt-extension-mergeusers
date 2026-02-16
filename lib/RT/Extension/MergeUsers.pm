@@ -360,6 +360,7 @@ sub CanonicalizeEmailAddress {
     if ($RT::CanonicalizeEmailAddressMatch && $RT::CanonicalizeEmailAddressReplace ) {
         $address =~ s/$RT::CanonicalizeEmailAddressMatch/$RT::CanonicalizeEmailAddressReplace/gi;
     }
+    return $address if $address eq '';
 
     # Empty emails should not be used to find users
     return $address unless defined $address && length $address;
@@ -368,7 +369,8 @@ sub CanonicalizeEmailAddress {
     my $canonical_user = RT::User->new( $RT::SystemUser );
     $canonical_user->LoadByCols( EmailAddress => $address );
     return $address unless $canonical_user->id;
-    return $address unless $canonical_user->EmailAddress && $canonical_user->EmailAddress ne $address;
+    return $address unless $canonical_user->EmailAddress;
+    return $address if $canonical_user->EmailAddress eq $address;
     return $canonical_user->CanonicalizeEmailAddress(
         $canonical_user->EmailAddress
     );
